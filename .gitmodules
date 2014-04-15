@@ -1,0 +1,6 @@
+[submodule "srcomp"]
+	path = srcomp
+	url = git://srobo.org/comp/srcomp
+[submodule "compstate"]
+	path = compstate
+	url = git://srobo.org/comp/dummy-comp

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>SR Match Submit</title>
+
+    <link href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png" rel="icon" />
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css" />
+
+    <link href="{{ url_for('static', filename='styles/reset.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='styles/all.css') }}" media="all" type="text/css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <header>
+      <a href="/">
+        <h1><img src="{{ url_for('static', filename='images/sr-logo.png') }}" /> SR Match Submit</h1>
+      </a>
+    </header>
+
+    <nav>
+      {% block nav %}
+        <ul>
+          <li><a href="/">Back to Home</a></li>
+        </ul>
+      {% endblock %}
+    </nav>
+
+    <main>
+      {% block main %}
+      {% endblock %}
+    </main>
+  </body>
+
+</html>

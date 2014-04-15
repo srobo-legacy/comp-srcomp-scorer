@@ -1,0 +1,115 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    margin: 60px;
+    font-size: 12pt;
+    line-height: 1.2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    margin: 10px 0;
+}
+
+a {
+    color: rgb(30, 30, 30);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+header a:hover {
+    text-decoration: none;
+}
+
+header h1 {
+    font-size: 3em;
+}
+
+header h1 > img {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+nav {
+    margin-left: 10px;
+    margin-bottom: 30px;
+}
+
+nav ul li {
+    font-size: 1.3em;
+    margin: 10px 0;
+}
+
+nav ul li:before {
+    content: "» ";
+}
+
+input:not([type="submit"]), select, textarea {
+    background: rgb(255, 255, 255);
+    color: rgb(50, 50, 50);
+    border: 1px solid rgb(220, 220, 220);
+    border-top: 1px solid rgb(190, 190, 190);
+    padding: 4px 8px;
+    width: 100%;
+}
+
+input[type=submit], button {
+    background: -webkit-linear-gradient(top, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 100%);
+    background: linear-gradient(top, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 100%);
+    border: solid 1px rgb(220, 220, 220);
+    font-weight: bold;
+    padding: 6px 12px;
+    margin: 4px;
+    color: rgb(50, 50, 50);
+}
+
+input[type=submit]:hover, button:hover {
+    border: 1px solid rgb(200, 200, 200);
+    background: rgb(250, 250, 250);
+    background: -webkit-linear-gradient(top, rgb(250, 250, 250) 0%, rgb(240, 240, 240) 100%);
+    background: linear-gradient(top, rgb(250, 250, 250) 0%, rgb(240, 240, 240) 100%);
+    color: rgb(35, 35, 35);
+    box-shadow: 0px 1px 1px 0px rgba(10, 10, 10, 0.1);
+}
+
+input[type=submit]:active, button:active {
+    border: 1px solid rgb(200, 200, 200); 
+    color: rgb(35, 35, 35);
+    box-shadow: inset 0 0 2px 4px rgb(240, 240, 240), 0 1px 0 0 rgb(235, 235, 235);
+}
+
+label {
+    margin-right: 10px;
+    font-weight: bold;
+    display: inline-block;
+    width: 140px;
+    text-align: right;
+}
+
+strong {
+    font-weight: bold;
+}
+
+table {
+    border: 1px solid rgb(0, 0, 0);
+    width: 100%;
+}
+
+table td, table th {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 6px;
+    white-space: nowrap;
+}
+
+table th {
+    font-weight: bold;
+}
+
+th:not(:only-child) {
+    text-align: right;
+}
