@@ -63,7 +63,11 @@ def submit():
         }
 
     if flask.request.method == "POST":
-        result = form_to_srcomp(flask.request.form)
+        try:
+            result = form_to_srcomp(flask.request.form)
+        except ValueError:
+            return flask.render_template("submit.html")
+
         return yaml.safe_dump(result)
     else:
         return flask.render_template("submit.html")
