@@ -83,7 +83,7 @@ def submit_category_arena(category, arena):
         try:
             result = form_to_srcomp(flask.request.form)
         except ValueError:
-            return flask.render_template("submit.html", category=category,
+            return flask.render_template("submit_category_arena.html", category=category,
                                          arena=arena,
                                          error="Please check through your inputs.")
         else:
@@ -101,7 +101,7 @@ def submit_category_arena(category, arena):
                 subprocess.check_call(["git", "commit", "-m", commit_msg], cwd=args.compstate)
                 subprocess.check_call(["git", "push", "origin", "master"], cwd=args.compstate)
             except subprocess.CalledProcessError as e:
-                return flask.render_template("submit.html", category=category,
+                return flask.render_template("submit_category_arena.html", category=category,
                                          arena=arena,
                                          error="Git error, try commiting manually.")
             else:
