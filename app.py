@@ -84,22 +84,28 @@ def submit_category_arena(category, arena):
             result = form_to_srcomp(flask.request.form)
         except ValueError:
             return flask.render_template("submit.html", category=category,
+                                         arena=arena,
                                          error="Please check through your inputs.")
         else:
-            subprocess.call(["git", "reset", "--hard", "HEAD"], cwd=args.compstate)
-            subprocess.call(["git", "pull", "origin", "master"], cwd=args.compstate)
-            path = "{0}/{1}/{2}/{3:0>3}.yaml".format(args.compstate,
-                                             category,
-                                             arena,
-                                             int(flask.request.form["match_number"]))
-            with open(path, "w") as fd:
-                fd.write(yaml.safe_dump(result))
-            subprocess.call(["git", "add", path], cwd=args.compstate)
-            commit_msg = "update {} scores for arena {}".format(category, arena)
-            subprocess.call(["git", "commit", "-m", commit_msg], cwd=args.compstate)
-            subprocess.call(["git", "push", "origin", "master"], cwd=args.compstate)
-
-        return yaml.safe_dump(result)
+            try:
+                subprocess.check_call(["git", "reset", "--hard", "HEAD"], cwd=args.compstate)
+                subprocess.check_call(["git", "pull", "origin", "master"], cwd=args.compstate)
+                path = "{0}/{1}/{2}/{3:0>3}.yaml".format(args.compstate,
+                                                category,
+                                                arena,
+                                                int(flask.request.form["match_number"]))
+                with open(path, "w") as fd:
+                    fd.write(yaml.safe_dump(result))
+                subprocess.check_call(["git", "add", path], cwd=args.compstate)
+                commit_msg = "update {} scores for arena {}".format(category, arena)
+                subprocess.check_call(["git", "commit", "-m", commit_msg], cwd=args.compstate)
+                subprocess.check_call(["git", "push", "origin", "master"], cwd=args.compstate)
+            except subprocess.CalledProcessError as e:
+                return flask.render_template("submit.html", category=category,
+                                         arena=arena,
+                                         error="Git error, try commiting manually.")
+            else:
+                return flask.redirect("/")
     else:
         comp = srcomp.SRComp(args.compstate)
         match = comp.schedule.current_match(arena)
@@ -112,7 +118,8 @@ def submit_category_arena(category, arena):
                 "team_tla_3": match.teams[3],
             }
 
-        return flask.render_template("submit_category_arena.html", category=category, arena=arena)
+        return flask.render_template("submit_category_arena.html",
+                                     category=category, arena=arena)
 
 
 if __name__ == "__main__":
