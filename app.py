@@ -19,8 +19,8 @@ def review():
     return flask.render_template("review.html")
 
 
-@app.route("/submit", methods=["GET", "POST"])
-def submit():
+@app.route("/submit/<category>", methods=["GET", "POST"])
+def submit(category):
     def form_to_srcomp(form):
         def form_team_to_scrcomp(corner, teams):
             tla = form["team_tla_{}".format(corner)]
@@ -66,11 +66,24 @@ def submit():
         try:
             result = form_to_srcomp(flask.request.form)
         except ValueError:
-            return flask.render_template("submit.html")
+            return flask.render_template("submit.html", category=category)
+        else:
+            pass
 
         return yaml.safe_dump(result)
     else:
-        return flask.render_template("submit.html")
+        #match = comp.schedule.current_match("A")
+        #if match:
+        #    flask.request.form = {
+        #        "match_number": match.num,
+        #        "arena": match.arena,
+        #        "team_tla_0": match.teams[0],
+        #        "team_tla_1": match.teams[1],
+        #        "team_tla_2": match.teams[2],
+        #        "team_tla_3": match.teams[3],
+        #    }
+
+        return flask.render_template("submit.html", category=category)
 
 
 if __name__ == "__main__":
