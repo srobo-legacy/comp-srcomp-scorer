@@ -95,7 +95,8 @@ def submit_category_arena(category, arena):
             with open(path, "w") as fd:
                 fd.write(yaml.safe_dump(result))
             subprocess.call(["git", "add", path], cwd=args.compstate)
-            subprocess.call(["git", "commit", "-m", "update {} scores".format(category)], cwd=args.compstate)
+            commit_msg = "update {} scores for arena {}".format(category, arena)
+            subprocess.call(["git", "commit", "-m", commit_msg], cwd=args.compstate)
             subprocess.call(["git", "push", "origin", "master"], cwd=args.compstate)
 
         return yaml.safe_dump(result)
