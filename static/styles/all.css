@@ -117,3 +117,8 @@ table th {
 th:not(:only-child) {
     text-align: right;
 }
+
+.error {
+    color: red;
+    font-weight: bold;
+}

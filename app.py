@@ -1,12 +1,21 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
+import argparse
 import flask
+import os
 import srcomp
+import subprocess
 import yaml
 
 
+PATH = os.path.dirname(os.path.abspath(__file__))
+
+parser = argparse.ArgumentParser(description="SR Match Score input")
+parser.add_argument("-c", "--compstate", default=PATH + "/compstate",
+                    help="Competition state git repository path")
+args = parser.parse_args()
+
 app = flask.Flask(__name__)
 app.debug = True
-comp = srcomp.SRComp("compstate")
 
 
 @app.route("/")
@@ -19,13 +28,21 @@ def review():
     return flask.render_template("review.html")
 
 
-@app.route("/submit/<category>", methods=["GET", "POST"])
-def submit(category):
+@app.route("/submit")
+def submit():
+    return flask.render_template("submit.html")
+
+
+@app.route("/submit/<category>")
+def submit_category(category):
+    return flask.render_template("submit_category.html", category=category)
+
+@app.route("/submit/<category>/<arena>", methods=["GET", "POST"])
+def submit_category_arena(category, arena):
     def form_to_srcomp(form):
         def form_team_to_scrcomp(corner, teams):
             tla = form["team_tla_{}".format(corner)]
             if tla:
-                print(form)
                 teams[tla] = {
                     "zone": corner,
                     "disqualified": "robot_disqualified_{}".format(corner) in form,
@@ -57,7 +74,7 @@ def submit(category):
         form_team_to_scrcomp(3, teams)
 
         return {
-            "arena_id": form["arena"],
+            "arena_id": arena,
             "match_number": int(form["match_number"]),
             "teams": teams
         }
@@ -66,24 +83,35 @@ def submit(category):
         try:
             result = form_to_srcomp(flask.request.form)
         except ValueError:
-            return flask.render_template("submit.html", category=category)
+            return flask.render_template("submit.html", category=category,
+                                         error="Please check through your inputs.")
         else:
-            pass
+            subprocess.call(["git", "reset", "--hard", "HEAD"], cwd=args.compstate)
+            subprocess.call(["git", "pull", "origin", "master"], cwd=args.compstate)
+            path = "{0}/{1}/{2}/{3:0>3}.yaml".format(args.compstate,
+                                             category,
+                                             arena,
+                                             int(flask.request.form["match_number"]))
+            with open(path, "w") as fd:
+                fd.write(yaml.safe_dump(result))
+            subprocess.call(["git", "add", path], cwd=args.compstate)
+            subprocess.call(["git", "commit", "-m", "update {} scores".format(category)], cwd=args.compstate)
+            subprocess.call(["git", "push", "origin", "master"], cwd=args.compstate)
 
         return yaml.safe_dump(result)
     else:
-        #match = comp.schedule.current_match("A")
-        #if match:
-        #    flask.request.form = {
-        #        "match_number": match.num,
-        #        "arena": match.arena,
-        #        "team_tla_0": match.teams[0],
-        #        "team_tla_1": match.teams[1],
-        #        "team_tla_2": match.teams[2],
-        #        "team_tla_3": match.teams[3],
-        #    }
+        comp = srcomp.SRComp(args.compstate)
+        match = comp.schedule.current_match(arena)
+        if match:
+            flask.request.form = {
+                "match_number": match.num,
+                "team_tla_0": match.teams[0],
+                "team_tla_1": match.teams[1],
+                "team_tla_2": match.teams[2],
+                "team_tla_3": match.teams[3],
+            }
 
-        return flask.render_template("submit.html", category=category)
+        return flask.render_template("submit_category_arena.html", category=category, arena=arena)
 
 
 if __name__ == "__main__":
