@@ -2,6 +2,7 @@
 import argparse
 import flask
 import os
+import os.path
 import srcomp
 import subprocess
 import yaml
@@ -36,6 +37,7 @@ def submit():
 @app.route("/submit/<category>")
 def submit_category(category):
     return flask.render_template("submit_category.html", category=category)
+
 
 @app.route("/submit/<category>/<arena>", methods=["GET", "POST"])
 def submit_category_arena(category, arena):
@@ -94,13 +96,14 @@ def submit_category_arena(category, arena):
                                                 category,
                                                 arena,
                                                 int(flask.request.form["match_number"]))
+                os.makedirs(os.path.dirname(path))
                 with open(path, "w") as fd:
                     fd.write(yaml.safe_dump(result))
                 subprocess.check_call(["git", "add", path], cwd=args.compstate)
                 commit_msg = "update {} scores for arena {}".format(category, arena)
                 subprocess.check_call(["git", "commit", "-m", commit_msg], cwd=args.compstate)
                 subprocess.check_call(["git", "push", "origin", "master"], cwd=args.compstate)
-            except subprocess.CalledProcessError as e:
+            except (OSError, subprocess.CalledProcessError) as e:
                 return flask.render_template("submit_category_arena.html", category=category,
                                          arena=arena,
                                          error="Git error, try commiting manually.")
