@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <title>SR Match Submit</title>
+    <head>
+        <meta charset="UTF-8" />
 
-    <link href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png" rel="icon" />
+        <title>SR Competition Scorer</title>
 
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png" rel="icon" />
 
-    <link href="{{ url_for('static', filename='styles/reset.css') }}" type="text/css" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='styles/all.css') }}" media="all" type="text/css" rel="stylesheet" />
-  </head>
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css" />
 
-  <body>
-    <header>
-      <a href="/">
-        <h1><img src="{{ url_for('static', filename='images/sr-logo.png') }}" /> SR Match Submit</h1>
-      </a>
-    </header>
+        <link href="{{ url_for('static', filename='styles/reset.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='styles/all.css') }}" media="all" type="text/css" rel="stylesheet" />
+    </head>
 
-    <nav>
-      {% block nav %}
-        <ul>
-          <li><a href="/">Back to Home</a></li>
-        </ul>
-      {% endblock %}
-    </nav>
+    <body>
+        <header>
+            <a href="/">
+                <h1><img src="{{ url_for('static', filename='images/sr-logo.png') }}" /> SR Competition Scorer</h1>
+            </a>
+        </header>
 
-    <main>
-      {% block main %}
-      {% endblock %}
-    </main>
-  </body>
+        <nav>
+            <ul>
+                {% block nav %}
+                {% endblock %}
+            </ul>
+        </nav>
+
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
+    </body>
 
 </html>
