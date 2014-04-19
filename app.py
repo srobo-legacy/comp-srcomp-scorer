@@ -10,7 +10,7 @@ import yaml
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-parser = argparse.ArgumentParser(description="SR Match Score input")
+parser = argparse.ArgumentParser(description="SR Competition Scorer")
 parser.add_argument("-c", "--compstate", default=PATH + "/compstate",
                     help="Competition state git repository path")
 args = parser.parse_args()
