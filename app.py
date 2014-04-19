@@ -4,6 +4,7 @@ import flask
 import os
 import os.path
 import srcomp
+import srcomp.validation
 import subprocess
 import yaml
 
@@ -48,12 +49,12 @@ def save_score(match, score):
 
 def form_to_score(match, form):
     def form_team_to_score(zone, teams):
-        tla = form["team_tla_{}".format(zone)]
+        tla = form.get("team_tla_{}".format(zone), None)
         if tla:
             team = {
                 "zone": zone,
                 "disqualified": form.get("disqualified_{}".format(zone), None) is not None,
-                "present": form.get("absent_{}".format(zone), None) is not None,
+                "present": form.get("absent_{}".format(zone), None) is None,
                 "robot_moved": form.get("robot_moved_{}".format(zone), None) is not None,
                 "upright_tokens": int(form["upright_tokens_{}".format(zone)]),
                 "zone_tokens": {},
@@ -66,6 +67,7 @@ def form_to_score(match, form):
 
             for i in range(8):
                 selected_zone = int(form.get("slot_bottoms_{}".format(i), -1))
+                print(selected_zone, zone)
                 if selected_zone == zone:
                     team["slot_bottoms"][i] = 1
 
@@ -104,6 +106,57 @@ def score_to_form(score):
     return form
 
 
+def reset_compstate():
+    try:
+        subprocess.check_call(["git", "reset", "--hard", "HEAD"],
+                              cwd=args.compstate)
+    except (OSError, subprocess.CalledProcessError):
+        raise RuntimeError("Git reset failed.")
+
+
+def reset_and_pull_compstate():
+    reset_compstate()
+
+    try:
+        subprocess.check_call(["git", "pull", "--ff-only", "origin", "master"],
+                              cwd=args.compstate)
+    except (OSError, subprocess.CalledProcessError):
+        raise RuntimeError("Git pull failed, deal with the merge manually.")
+
+
+def update_and_validate_compstate(match, score):
+    save_score(match, score)
+
+    path = get_score_path(match)
+    subprocess.check_call(["git", "add", path], cwd=args.compstate)
+
+    try:
+        comp = get_competition()
+    except Exception as e:
+        # a bit nasty, but SRComp sometimes throws generic Exceptions
+        # we have to reset the repo because SRComp fails to instantiate
+        reset_compstate()
+        raise RuntimeError(e)
+    else:
+        i = srcomp.validation.validate(comp)
+        if i > 0:
+            raise RuntimeError(str(i))
+
+
+def commit_and_push_compstate(match):
+    commit_msg = "update {} scores for match {} in arena {}".format(match.type,
+                                                                    match.num,
+                                                                    match.arena)
+
+    try:
+        subprocess.check_call(["git", "commit", "-m", commit_msg],
+                            cwd=args.compstate)
+        subprocess.check_call(["git", "push", "origin", "master"],
+                            cwd=args.compstate)
+    except (OSError, subprocess.CalledProcessError):
+        raise RuntimeError("Git push failed, deal with the merge manually.")
+
+
 @app.route("/")
 def index():
     comp = get_competition()
@@ -120,8 +173,12 @@ def update(arena, num):
         return flask.redirect("/")  # TODO: could show an error message here
 
     if flask.request.method == "GET":
-        score = load_score(match)
-        flask.request.form = score_to_form(score)
+        try:
+            score = load_score(match)
+        except IOError:
+            pass
+        else:
+            flask.request.form = score_to_form(score)
     elif flask.request.method == "POST":
         try:
             score = form_to_score(match, flask.request.form)
@@ -130,24 +187,12 @@ def update(arena, num):
                                          error="Invalid input.")
 
         try:
-            subprocess.check_call(["git", "reset", "--hard", "HEAD"],
-                                    cwd=args.compstate)
-            subprocess.check_call(["git", "pull", "--ff-only", "origin",
-                                    "master"], cwd=args.compstate)
-            save_score(match, score)
-            path = get_score_path(match)
-            #subprocess.check_call(["git", "add", path], cwd=args.compstate)
-            # TODO: validate competition state
-            #commit_msg = "update {} scores for arena {}".format(category,
-            #                                                    arena)
-            #subprocess.check_call(["git", "commit", "-m", commit_msg],
-            #                        cwd=args.compstate)
-            #subprocess.check_call(["git", "push", "origin", "master"],
-            #                        cwd=args.compstate)
-        except (OSError, subprocess.CalledProcessError) as e:
-            error = "Git error ({}), try commiting manually.".format(e)
+            reset_and_pull_compstate()
+            update_and_validate_compstate(match, score)
+            commit_and_push_compstate(match)
+        except RuntimeError as e:
             return flask.render_template("update.html", match=match,
-                                         error=error)
+                                         error=str(e))
         else:
             return flask.redirect("/{}/{}".format(arena, num))
 

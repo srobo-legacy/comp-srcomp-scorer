@@ -30,8 +30,10 @@
                 {% for i in range(4) %}
                     <td>
                         {{match["teams"][i]}}
-                        <input type="hidden" name="team_tla_{{i}}"
-                               value="{{match["teams"][i]}}" />
+                        {% if match["teams"][i] != None %}
+                            <input type="hidden" name="team_tla_{{i}}"
+                                   value="{{match["teams"][i]}}" />
+                        {% endif %}
                     </td>
                 {% endfor %}
             </tr>
