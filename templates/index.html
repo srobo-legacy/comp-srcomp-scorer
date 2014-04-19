@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+
+{% block main %}
+    <ul>
+        {% for match in matches %}
+            {% for arena, info in match.items() %}
+                <li>
+                    <a href="/{{arena}}/{{info["num"]}}">
+                        {{arena}}, {{info["num"]}} &mdash; {{info["teams"]|join(", ")}}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endblock %}

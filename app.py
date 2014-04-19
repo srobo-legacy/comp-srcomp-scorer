@@ -28,8 +28,12 @@ def get_score_path(category, arena, match_number):
     return "{0}/{1:0>3}.yaml".format(scores_path, match_number)
 
 
+def get_competition():
+    return srcomp.SRComp(args.compstate)
+
+
 def get_current_match(arena):
-    comp = srcomp.SRComp(args.compstate)
+    comp = get_competition()
     return comp.schedule.current_match(arena)
 
 
@@ -128,14 +132,9 @@ def score_to_form(score):
 
 
 @app.route("/")
-@app.route("/review")
-@app.route("/review/league")
-@app.route("/review/knockout")
-@app.route("/submit")
-@app.route("/submit/league")
-@app.route("/submit/knockout")
-def navigation():
-    return flask.render_template("navigation.html")
+def index():
+    comp = get_competition()
+    return flask.render_template("index.html", matches=comp.schedule.matches)
 
 
 @app.route("/review/<category>/<arena>")
