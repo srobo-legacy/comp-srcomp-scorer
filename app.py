@@ -137,7 +137,18 @@ def index():
     return flask.render_template("index.html", matches=comp.schedule.matches)
 
 
-@app.route("/review/<category>/<arena>")
+@app.route("/<arena>/<int:num>", methods=["GET", "POST"])
+def update(arena, num):
+    comp = get_competition()
+
+    try:
+        match = comp.schedule.matches[num][arena]
+    except (IndexError, KeyError):
+        return flask.redirect("/")  # TODO: could show an error message here
+
+    return flask.render_template("update.html", match=match)
+
+"""@app.route("/review/<category>/<arena>")
 def review(category, arena):
     scores = list_scores(category, arena)
     return flask.render_template("review.html", category=category, arena=arena,
@@ -193,8 +204,7 @@ def submit(category, arena, match_number):
 
         return flask.render_template("submit.html",
                                      category=category, arena=arena,
-                                     match_number=match_number)
-
+                                     match_number=match_number)"""
 
 if __name__ == "__main__":
     app.run(port=3000)

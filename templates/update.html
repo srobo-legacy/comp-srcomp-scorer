@@ -5,36 +5,13 @@
 {% endblock %}
 
 {% block main %}
-    {% if match_number == None %}
-        <h1><a href="/submit">{{category|title}}</a> scores for <a href="/submit/{{category}}">arena {{arena}}</a></h1>
-    {% else %}
-        <h1><a href="/submit">{{category|title}}</a> scores for <a href="/review/{{category}}/{{arena}}">match {{match_number}}</a> in <a href="/submit/{{category}}">arena {{arena}}</a></h1>
-    {% endif %}
+    <h1>{{match["type"]|title}} scores for match {{match["num"]}} in arena {{match["arena"]}}</h1>
 
     {% if error %}
         <h2 class="error">{{error}}</h2>
     {% endif %}
 
     <form method="POST">
-        <table>
-            {% if match_number == None %}
-                <tr>
-                    <th colspan="6">Match information</th>
-                </tr>
-
-                <tr>
-                    <th>Match Number</th>
-                    <td>
-                        <input type="number" name="match_number"
-                               value="{{request.form.get("match_number", "")}}"
-                               required min="0" max="1000" />
-                    </td>
-                </tr>
-            {% endif %}
-        </table>
-
-        <br />
-
         <table>
             <tr>
                 <th>Corner</th>
@@ -52,8 +29,7 @@
                 <th>Team (TLA)</th>
                 {% for i in range(4) %}
                     <td>
-                        <input type="text" name="team_tla_{{i}}" maxlength="4"
-                               value="{{request.form.get("team_tla_{}".format(i), "")}}" />
+                        {{match["teams"][i]}}
                     </td>
                 {% endfor %}
             </tr>
@@ -121,12 +97,11 @@
 
             {% for i in range(8) %}
                 <tr>
-                    <th>Zone {{ i }}</th>
+                    <th>Slot {{ i }}</th>
                     {% for j in range(4) %}
                         <td>
-                            <input type="checkbox"
-                                   name="slot_bottoms_{{i}}_{{j}}" value="on"
-                                   {{"checked" if request.form.get("slot_bottoms_{}_{}".format(i, j), None) else ""}} />
+                            <input type="radio" name="slot_bottoms_{{i}}"
+                                   value="{{j}}" {{"checked" if request.form.get("slot_bottoms_{}".format(i), None)==j else ""}} />
                         </td>
                     {% endfor %}
                 </tr>
