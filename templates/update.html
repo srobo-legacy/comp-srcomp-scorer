@@ -30,6 +30,8 @@
                 {% for i in range(4) %}
                     <td>
                         {{match["teams"][i]}}
+                        <input type="hidden" name="team_tla_{{i}}"
+                               value="{{match["teams"][i]}}" />
                     </td>
                 {% endfor %}
             </tr>
@@ -101,7 +103,7 @@
                     {% for j in range(4) %}
                         <td>
                             <input type="radio" name="slot_bottoms_{{i}}"
-                                   value="{{j}}" {{"checked" if request.form.get("slot_bottoms_{}".format(i), None)==j else ""}} />
+                                   value="{{j}}" {{"checked" if int(request.form.get("slot_bottoms_{}".format(i), -1)) == j else ""}} />
                         </td>
                     {% endfor %}
                 </tr>
