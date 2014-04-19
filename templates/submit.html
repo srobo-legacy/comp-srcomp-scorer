@@ -1,120 +1,141 @@
 {% extends "_base.html" %}
 
 {% block nav %}
-<li><a href="/">Back to Home</a></li>
+    <li><a href="/">Back to Home</a></li>
 {% endblock %}
 
 {% block main %}
-{% if match_number == None %}
-    <h1><a href="/submit">{{ category|title }}</a> scores for <a href="/submit/{{ category }}">arena {{ arena }}</a></h1>
-{% else %}
-    <h1><a href="/submit">{{ category|title }}</a> scores for <a href="/review/{{ category }}/{{ arena }}">match {{ match_number }}</a> in <a href="/submit/{{ category }}">arena {{ arena }}</a></h1>
-{% endif %}
+    {% if match_number == None %}
+        <h1><a href="/submit">{{category|title}}</a> scores for <a href="/submit/{{category}}">arena {{arena}}</a></h1>
+    {% else %}
+        <h1><a href="/submit">{{category|title}}</a> scores for <a href="/review/{{category}}/{{arena}}">match {{match_number}}</a> in <a href="/submit/{{category}}">arena {{arena}}</a></h1>
+    {% endif %}
 
-{% if error %}
-<h2 class="error">{{ error }}</h2>
-{% endif %}
+    {% if error %}
+        <h2 class="error">{{error}}</h2>
+    {% endif %}
 
-<form method="POST">
-    <table>
-        {% if match_number == None %}
+    <form method="POST">
+        <table>
+            {% if match_number == None %}
+                <tr>
+                    <th colspan="6">Match information</th>
+                </tr>
+
+                <tr>
+                    <th>Match Number</th>
+                    <td>
+                        <input type="number" name="match_number"
+                               value="{{request.form.get("match_number", "")}}"
+                               required min="0" max="1000" />
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+
+        <br />
+
+        <table>
             <tr>
-                <th colspan="6">Match information</th>
+                <th>Corner</th>
+                <td>0</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
             </tr>
 
             <tr>
-                <th>Match Number</th>
-                <td>
-                    <input type="number" name="match_number" value="{{ request.form.get("match_number", "") }}" />
-                </td>
+                <th colspan="5">Robot Information</th>
             </tr>
-        {% endif %}
-    </table>
 
-    <br />
-
-    <table>
-        <tr>
-            <th>Corner</th>
-            <td>0</td>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-        </tr>
-
-        <tr>
-            <th colspan="5">Robot Information</th>
-        </tr>
-
-        <tr>
-            <th>Team (TLA)</th>
-            {% for i in range(4) %}
-                <td>
-                    <input type="text" name="team_tla_{{ i }}" maxlength="4" value="{{ request.form.get("team_tla_{}".format(i), "") }}" />
-                </td>
-            {% endfor %}
-        </tr>
-
-        <tr>
-            <th>Did the robot exit its corner?</th>
-            {% for i in range(4) %}
-                <td>
-                    <input type="checkbox" name="robot_moved_{{ i }}" value="on" {{ "checked" if request.form.get("robot_moved_{}".format(i), False) else "" }} />
-                </td>
-            {% endfor %}
-        </tr>
-
-        <tr>
-            <th>Was the robot disqualified?</th>
-            {% for i in range(4) %}
-                <td><input type="checkbox" name="disqualified_{{ i }}" value="on" {{ "checked" if request.form.get("disqualified_{}".format(i), False) else "" }} /></td>
-            {% endfor %}
-        </tr>
-
-        <tr>
-            <th>Was the robot absent from this match?</th>
-            {% for i in range(4) %}
-                <td><input type="checkbox" name="absent_{{ i }}" value="on" {{ "checked" if request.form.get("absent_{}".format(i), False) else "" }} /></td>
-            {% endfor %}
-        </tr>
-
-        <tr>
-            <th>Number of upright tokens in the arena?</th>
-            {% for i in range(4) %}
-                <td><input type="number" name="upright_tokens_{{ i }}" value="{{ request.form.get("upright_tokens_{}".format(i), 0) }}" /></td>
-            {% endfor %}
-        </tr>
-
-        <tr>
-            <th colspan="5">How many tokens does the team have in each zone?</th>
-        </tr>
-
-        {% for i in range(4) %}
             <tr>
-                <th>Zone {{ i }}</th>
-                {% for j in range(4) %}
-                    <td><input type="number" name="zone_tokens_{{ i }}_{{ j }}" value="{{ request.form.get("zone_tokens_{}_{}".format(i, j), 0) }}" /></td>
+                <th>Team (TLA)</th>
+                {% for i in range(4) %}
+                    <td>
+                        <input type="text" name="team_tla_{{i}}" maxlength="4"
+                               value="{{request.form.get("team_tla_{}".format(i), "")}}" />
+                    </td>
                 {% endfor %}
             </tr>
-        {% endfor %}
 
-        <tr>
-            <th colspan="5">Which slot does the team have tokens at the bottom of?</th>
-        </tr>
-
-        {% for i in range(8) %}
             <tr>
-                <th>Zone {{ i }}</th>
-                {% for j in range(4) %}
-                    <td><input type="checkbox" name="slot_bottoms_{{ i }}_{{ j }}" value="on" {{ "checked" if request.form.get("slot_bottoms_{}_{}".format(i, j), None) else "" }} /></td>
+                <th>Did the robot exit its corner?</th>
+                {% for i in range(4) %}
+                    <td>
+                        <input type="checkbox" name="robot_moved_{{i}}"
+                               value="on" {{"checked" if request.form.get("robot_moved_{}".format(i), False) else ""}} />
+                    </td>
                 {% endfor %}
             </tr>
-        {% endfor %}
-    </table>
 
-    <br />
+            <tr>
+                <th>Was the robot disqualified?</th>
+                {% for i in range(4) %}
+                    <td>
+                        <input type="checkbox" name="disqualified_{{i}}"
+                               value="on" {{"checked" if request.form.get("disqualified_{}".format(i), False) else ""}} />
+                    </td>
+                {% endfor %}
+            </tr>
 
-    <input type="submit" value="Enter Scores" />
+            <tr>
+                <th>Was the robot absent from this match?</th>
+                {% for i in range(4) %}
+                    <td>
+                        <input type="checkbox" name="absent_{{i}}" value="on"
+                               {{ "checked" if request.form.get("absent_{}".format(i), False) else "" }} />
+                    </td>
+                {% endfor %}
+            </tr>
 
-</form>
+            <tr>
+                <th>Number of upright tokens in the arena?</th>
+                {% for i in range(4) %}
+                    <td>
+                        <input type="number" name="upright_tokens_{{i}}"
+                               value="{{request.form.get("upright_tokens_{}".format(i), 0)}}"
+                               required min="0" max="100" />
+                    </td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <th colspan="5">How many tokens does the team have in each zone?</th>
+            </tr>
+
+            {% for i in range(4) %}
+                <tr>
+                    <th>Zone {{ i }}</th>
+                    {% for j in range(4) %}
+                        <td>
+                            <input type="number" name="zone_tokens_{{i}}_{{j}}"
+                                   value="{{request.form.get("zone_tokens_{}_{}".format(i, j), 0)}}" />
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <th colspan="5">Which slot does the team have tokens at the bottom of?</th>
+            </tr>
+
+            {% for i in range(8) %}
+                <tr>
+                    <th>Zone {{ i }}</th>
+                    {% for j in range(4) %}
+                        <td>
+                            <input type="checkbox"
+                                   name="slot_bottoms_{{i}}_{{j}}" value="on"
+                                   {{"checked" if request.form.get("slot_bottoms_{}_{}".format(i, j), None) else ""}} />
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <br />
+
+        <input type="submit" value="Enter Scores" />
+
+    </form>
 {% endblock %}

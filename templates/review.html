@@ -5,12 +5,14 @@
 {% endblock %}
 
 {% block main %}
-    <h1><a href="/review">{{ category|title }}</a> scores for <a href="/review/{{ category }}">arena {{ arena }}</a></h1>
+    <h1>
+        <a href="/review">{{category|title}}</a> scores for <a href="/review/{{category}}">arena {{arena}}</a>
+    </h1>
 
     {% if scores %}
         <ul class="grid">
             {% for score in scores %}
-                <li><a href="/submit/{{ category }}/{{ arena }}/{{ score }}">{{ "{0:0>3}".format(score) }}</a></li>
+                <li><a href="/submit/{{category}}/{{arena}}/{{score}}">{{"{0:0>3}".format(score)}}</a></li>
             {% endfor %}
         </ul>
     {% else %}
