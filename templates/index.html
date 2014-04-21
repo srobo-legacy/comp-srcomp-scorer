@@ -1,15 +1,24 @@
 {% extends "_base.html" %}
 
 {% block main %}
-    <ul>
-        {% for match in matches %}
-            {% for arena, info in match.items() %}
-                <li>
-                    <a href="/{{arena}}/{{info["num"]}}">
-                        {{arena}}, {{info["num"]}} &mdash; {{info["teams"]|join(", ")}}
-                    </a>
-                </li>
-            {% endfor %}
+    <table>
+        <tr>
+            <th colspan="2">Arena A</th>
+            <th colspan="2">Arena B</th>
+        </tr>
+
+        {% for group in map(group_list_dict, grouper(matches, 2)) %}
+            <tr>
+                {% for arena, matches in group.items() %}
+                    {% for match in matches %}
+                        <td>
+                            <a href="/{{arena}}/{{ match["num"] }}">
+                                Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
+                            </a>
+                        </td>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

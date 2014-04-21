@@ -1,6 +1,9 @@
 #!/usr/bin/env python2
 import argparse
+import itertools
+import collections
 import flask
+import itertools
 import os
 import os.path
 import srcomp
@@ -18,7 +21,31 @@ args = parser.parse_args()
 
 app = flask.Flask(__name__)
 app.debug = True
-app.jinja_env.globals.update(int=int)
+app.jinja_env.globals.update(int=int, map=map)
+
+
+def grouper(iterable, n, fillvalue=None):
+    "Collect data into fixed-length chunks or blocks"
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+    args = [iter(iterable)] * n
+    return itertools.izip_longest(fillvalue=fillvalue, *args)
+app.jinja_env.globals.update(grouper=grouper)
+
+
+def group_list_dict(matches):
+    """
+    Group a list of dictionaries into a dictionary of lists.
+
+    This will convert
+        [{"A": a, "B": b}, {"A": a2, "B": b2}]
+    into
+        {"A": [a, a2], "B": [b, b2]}
+    """
+    target = collections.defaultdict(list)
+    for k, v in itertools.chain.from_iterable(d.items() if d else [] for d in matches):
+        target[k].append(v)
+    return target
+app.jinja_env.globals.update(group_list_dict=group_list_dict)
 
 
 def get_score_path(match):

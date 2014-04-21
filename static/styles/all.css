@@ -104,22 +104,32 @@ strong {
     font-weight: bold;
 }
 
+em {
+    font-style: italic;
+}
+
 table {
-    border: 1px solid rgb(0, 0, 0);
-    width: 100%;
+    width: 100%
 }
 
-table td, table th {
-    border: 1px solid rgb(0, 0, 0);
-    padding: 6px;
-    white-space: nowrap;
-}
-
-table th {
+th {
     font-weight: bold;
 }
 
-th:not(:only-child) {
+td, th {
+    padding: 6px;
+}
+
+table.update_form {
+    border: 1px solid rgb(0, 0, 0);
+}
+
+table.update_form td, table.update_form th {
+    border: 1px solid rgb(0, 0, 0);
+    white-space: nowrap;
+}
+
+table.update_form th:not(:only-child) {
     text-align: right;
 }
 
