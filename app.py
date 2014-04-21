@@ -94,7 +94,6 @@ def form_to_score(match, form):
 
             for i in range(8):
                 selected_zone = int(form.get("slot_bottoms_{}".format(i), -1))
-                print(selected_zone, zone)
                 if selected_zone == zone:
                     team["slot_bottoms"][i] = 1
 
