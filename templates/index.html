@@ -1,5 +1,13 @@
 {% extends "_base.html" %}
 
+{% macro match_cell(match, colspan=1) %}
+    <td colspan="{{ colspan }}">
+        <a href="/{{ match["arena"] }}/{{ match["num"] }}">
+            Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
+        </a>
+    </td>
+{% endmacro %}
+
 {% block main %}
     <table>
         <tr>
@@ -7,15 +15,17 @@
             <th colspan="2">Arena B</th>
         </tr>
 
+        <tr>
+            {% for match in current_matches.values() %}
+                {{ match_cell(match, colspan=2) }}
+            {% endfor %}
+        </tr>
+
         {% for group in map(group_list_dict, grouper(matches, 2)) %}
             <tr>
                 {% for arena, matches in group.items() %}
                     {% for match in matches %}
-                        <td>
-                            <a href="/{{arena}}/{{ match["num"] }}">
-                                Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
-                            </a>
-                        </td>
+                        {{ match_cell(match) }}
                     {% endfor %}
                 {% endfor %}
             </tr>

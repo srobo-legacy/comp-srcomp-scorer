@@ -186,7 +186,9 @@ def commit_and_push_compstate(match):
 @app.route("/")
 def index():
     comp = get_competition()
-    return flask.render_template("index.html", matches=comp.schedule.matches)
+    current_matches = {arena: comp.schedule.current_match(arena) for arena in comp.arenas}
+    return flask.render_template("index.html", matches=comp.schedule.matches,
+                                 current_matches=current_matches)
 
 
 @app.route("/<arena>/<int:num>", methods=["GET", "POST"])
