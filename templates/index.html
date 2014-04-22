@@ -2,9 +2,11 @@
 
 {% macro match_cell(match, colspan=1) %}
     <td colspan="{{ colspan }}">
-        <a href="/{{ match["arena"] }}/{{ match["num"] }}">
-            Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
-        </a>
+        {% if match is not none %}
+            <a href="/{{ match["arena"] }}/{{ match["num"] }}">
+                Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
+            </a>
+        {% endif %}
     </td>
 {% endmacro %}
 
