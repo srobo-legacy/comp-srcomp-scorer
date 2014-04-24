@@ -1,10 +1,14 @@
 {% extends "_base.html" %}
 
-{% macro match_cell(match, colspan=1) %}
+{% macro match_cell(match, colspan=1, current_match=False) %}
     <td colspan="{{ colspan }}">
         {% if match is not none %}
             <a href="/{{ match["arena"] }}/{{ match["num"] }}">
-                Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
+                {% if current_match %}
+                    Current Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
+                {% else %}
+                    {{ match["num"] }}
+                {% endif %}
             </a>
         {% endif %}
     </td>
@@ -13,17 +17,17 @@
 {% block main %}
     <table>
         <tr>
-            <th colspan="2">Arena A</th>
-            <th colspan="2">Arena B</th>
+            <th colspan="8">Arena A</th>
+            <th colspan="8">Arena B</th>
         </tr>
 
         <tr>
             {% for match in current_matches.values() %}
-                {{ match_cell(match, colspan=2) }}
+                {{ match_cell(match, colspan=8, current_match=True) }}
             {% endfor %}
         </tr>
 
-        {% for group in map(group_list_dict, grouper(matches, 2)) %}
+        {% for group in map(group_list_dict, grouper(matches, 8)) %}
             <tr>
                 {% for arena, matches in group.items() %}
                     {% for match in matches %}
