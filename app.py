@@ -158,9 +158,9 @@ def update_and_validate_compstate(match, score):
 
     try:
         comp = get_competition()
-    except Exception as e:
-        # a bit nasty, but SRComp sometimes throws generic Exceptions
-        # we have to reset the repo because SRComp fails to instantiate
+    except Exception as e:  # SRComp sometimes throws generic Exceptions
+        # we have to reset the repo because SRComp fails to instantiate and that
+        # would break everything!
         reset_compstate()
         raise RuntimeError(e)
     else:
