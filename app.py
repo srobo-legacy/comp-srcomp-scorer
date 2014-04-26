@@ -48,6 +48,15 @@ def group_list_dict(matches):
 app.jinja_env.globals.update(group_list_dict=group_list_dict)
 
 
+def is_match_done(match):
+    try:
+        load_score(match)
+        return True
+    except IOError:
+        return False
+app.jinja_env.globals.update(is_match_done=is_match_done)
+
+
 def get_score_path(match):
     return "{0}/{1}/{2}/{3:0>3}.yaml".format(args.compstate, match.type,
                                              match.arena, match.num)
@@ -121,6 +130,7 @@ def score_to_form(score):
         form["disqualified_{}".format(i)] = info.get("disqualified", False)
         form["absent_{}".format(i)] = not info.get("present", True)
         form["robot_moved_{}".format(i)] = info.get("robot_moved", True)
+        form["upright_tokens_{}".format(i)] = info.get("upright_tokens", True)
 
         for j in range(4):
             form["zone_tokens_{}_{}".format(j, i)] = info["zone_tokens"][j]

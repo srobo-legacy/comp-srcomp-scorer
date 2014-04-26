@@ -87,7 +87,7 @@ input[type=submit]:hover, button:hover {
 }
 
 input[type=submit]:active, button:active {
-    border: 1px solid rgb(200, 200, 200); 
+    border: 1px solid rgb(200, 200, 200);
     color: rgb(35, 35, 35);
     box-shadow: inset 0 0 2px 4px rgb(240, 240, 240), 0 1px 0 0 rgb(235, 235, 235);
 }
@@ -136,4 +136,8 @@ table.update_form th:not(:only-child) {
 .error {
     color: red;
     font-weight: bold;
+}
+
+.done {
+    color: green;
 }
