@@ -232,9 +232,9 @@ def update(arena, num):
             return flask.render_template("update.html", match=match,
                                          error=str(e))
         else:
-            return flask.redirect("/{}/{}".format(arena, num))
+            return flask.redirect("/{}/{}?done=true".format(arena, num))
 
-    return flask.render_template("update.html", match=match)
+    return flask.render_template("update.html", match=match, done=flask.request.args.get("done", False))
 
 
 if __name__ == "__main__":

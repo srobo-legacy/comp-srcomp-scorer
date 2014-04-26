@@ -140,4 +140,5 @@ table.update_form th:not(:only-child) {
 
 .done {
     color: green;
+    font-weight: bold;
 }

@@ -9,6 +9,8 @@
 
     {% if error %}
         <h2 class="error">{{ error }}</h2>
+    {% elif done %}
+        <h2 class="done">Scores updated successfully.</h2>
     {% endif %}
 
     <form method="POST">
