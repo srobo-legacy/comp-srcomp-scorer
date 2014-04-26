@@ -137,7 +137,7 @@ def score_to_form(score):
 
         for j in range(8):
             if info["slot_bottoms"][j]:
-                form["slot_bottoms_{}".format(j)] = True
+                form["slot_bottoms_{}".format(j)] = i
 
     return form
 
