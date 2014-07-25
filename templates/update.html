@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 
 {% block nav %}
-    <li><a href="/">Back to Home</a></li>
+    <li><a href="{{ url_for('.index') }}">Back to Home</a></li>
 {% endblock %}
 
 {% block main %}
