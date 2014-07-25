@@ -148,6 +148,9 @@ def reset_compstate():
 def reset_and_pull_compstate():
     reset_compstate()
 
+    if app.config['COMPSTATE_LOCAL']:
+        return
+
     try:
         subprocess.check_call(["git", "pull", "--ff-only", "origin", "master"],
                               cwd=app.config['COMPSTATE'])
@@ -182,6 +185,8 @@ def commit_and_push_compstate(match):
     try:
         subprocess.check_call(["git", "commit", "-m", commit_msg],
                             cwd=app.config['COMPSTATE'])
+        if app.config['COMPSTATE_LOCAL']:
+            return
         subprocess.check_call(["git", "push", "origin", "master"],
                             cwd=app.config['COMPSTATE'])
     except (OSError, subprocess.CalledProcessError):
@@ -236,6 +241,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SR Competition Scorer")
     parser.add_argument("-c", "--compstate", default=PATH + "/compstate",
                         help="Competition state git repository path")
+    parser.add_argument('-l', '--local', action='store_true',
+                        help="Disable fetch and push")
     args = parser.parse_args()
     app.config['COMPSTATE'] = args.compstate
+    app.config['COMPSTATE_LOCAL'] = args.local
     app.run(port=3000)
