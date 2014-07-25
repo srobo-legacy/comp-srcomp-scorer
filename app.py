@@ -14,11 +14,6 @@ import yaml
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-parser = argparse.ArgumentParser(description="SR Competition Scorer")
-parser.add_argument("-c", "--compstate", default=PATH + "/compstate",
-                    help="Competition state git repository path")
-args = parser.parse_args()
-
 app = flask.Flask(__name__)
 app.debug = True
 app.jinja_env.globals.update(int=int, map=map)
@@ -58,12 +53,12 @@ app.jinja_env.globals.update(is_match_done=is_match_done)
 
 
 def get_score_path(match):
-    return "{0}/{1}/{2}/{3:0>3}.yaml".format(args.compstate, match.type,
+    return "{0}/{1}/{2}/{3:0>3}.yaml".format(app.config['COMPSTATE'], match.type,
                                              match.arena, match.num)
 
 
 def get_competition():
-    return srcomp.SRComp(args.compstate)
+    return srcomp.SRComp(app.config['COMPSTATE'])
 
 
 def load_score(match):
@@ -145,7 +140,7 @@ def score_to_form(score):
 def reset_compstate():
     try:
         subprocess.check_call(["git", "reset", "--hard", "HEAD"],
-                              cwd=args.compstate)
+                              cwd=app.config['COMPSTATE'])
     except (OSError, subprocess.CalledProcessError):
         raise RuntimeError("Git reset failed.")
 
@@ -155,7 +150,7 @@ def reset_and_pull_compstate():
 
     try:
         subprocess.check_call(["git", "pull", "--ff-only", "origin", "master"],
-                              cwd=args.compstate)
+                              cwd=app.config['COMPSTATE'])
     except (OSError, subprocess.CalledProcessError):
         raise RuntimeError("Git pull failed, deal with the merge manually.")
 
@@ -164,7 +159,7 @@ def update_and_validate_compstate(match, score):
     save_score(match, score)
 
     path = get_score_path(match)
-    subprocess.check_call(["git", "add", path], cwd=args.compstate)
+    subprocess.check_call(["git", "add", path], cwd=app.config['COMPSTATE'])
 
     try:
         comp = get_competition()
@@ -186,9 +181,9 @@ def commit_and_push_compstate(match):
 
     try:
         subprocess.check_call(["git", "commit", "-m", commit_msg],
-                            cwd=args.compstate)
+                            cwd=app.config['COMPSTATE'])
         subprocess.check_call(["git", "push", "origin", "master"],
-                            cwd=args.compstate)
+                            cwd=app.config['COMPSTATE'])
     except (OSError, subprocess.CalledProcessError):
         raise RuntimeError("Git push failed, deal with the merge manually.")
 
@@ -238,4 +233,9 @@ def update(arena, num):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="SR Competition Scorer")
+    parser.add_argument("-c", "--compstate", default=PATH + "/compstate",
+                        help="Competition state git repository path")
+    args = parser.parse_args()
+    app.config['COMPSTATE'] = args.compstate
     app.run(port=3000)
