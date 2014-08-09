@@ -75,7 +75,7 @@ def save_score(match, score):
         os.makedirs(dirname)
 
     with open(path, "w") as fd:
-        fd.write(yaml.safe_dump(score))
+        yaml.safe_dump(score, fd, default_flow_style=False)
 
 
 def form_to_score(match, form):
