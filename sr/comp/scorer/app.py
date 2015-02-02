@@ -1,20 +1,16 @@
-#!/usr/bin/env python2
-import argparse
 import itertools
 import collections
 import flask
 import itertools
 import os
 import os.path
-import srcomp
-import srcomp.validation
+from sr.comp.comp import SRComp
+from sr.comp.validation import validate
 import subprocess
 import yaml
 
 
-PATH = os.path.dirname(os.path.abspath(__file__))
-
-app = flask.Flask(__name__)
+app = flask.Flask('sr.comp.scorer')
 app.debug = True
 app.jinja_env.globals.update(int=int, map=map)
 
@@ -23,7 +19,7 @@ def grouper(iterable, n, fillvalue=None):
     "Collect data into fixed-length chunks or blocks"
     # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
     args = [iter(iterable)] * n
-    return itertools.izip_longest(fillvalue=fillvalue, *args)
+    return itertools.zip_longest(fillvalue=fillvalue, *args)
 app.jinja_env.globals.update(grouper=grouper)
 
 
@@ -58,7 +54,7 @@ def get_score_path(match):
 
 
 def get_competition():
-    return srcomp.SRComp(app.config['COMPSTATE'])
+    return SRComp(app.config['COMPSTATE'])
 
 
 def load_score(match):
@@ -172,7 +168,7 @@ def update_and_validate_compstate(match, score):
         reset_compstate()
         raise RuntimeError(e)
     else:
-        i = srcomp.validation.validate(comp)
+        i = validate(comp)
         if i > 0:
             raise RuntimeError(str(i))
 
@@ -236,14 +232,3 @@ def update(arena, num):
 
     return flask.render_template("update.html", match=match, done=flask.request.args.get("done", False))
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="SR Competition Scorer")
-    parser.add_argument("-c", "--compstate", default=PATH + "/compstate",
-                        help="Competition state git repository path")
-    parser.add_argument('-l', '--local', action='store_true',
-                        help="Disable fetch and push")
-    args = parser.parse_args()
-    app.config['COMPSTATE'] = args.compstate
-    app.config['COMPSTATE_LOCAL'] = args.local
-    app.run(port=3000)
