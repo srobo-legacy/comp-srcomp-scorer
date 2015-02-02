@@ -158,7 +158,7 @@ def update_and_validate_compstate(match, score):
     save_score(match, score)
 
     path = get_score_path(match)
-    subprocess.check_call(["git", "add", path], cwd=app.config['COMPSTATE'])
+    subprocess.check_call(["git", "add", os.path.realpath(path)], cwd=app.config['COMPSTATE'])
 
     try:
         comp = get_competition()
