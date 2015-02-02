@@ -17,8 +17,9 @@
 {% block main %}
     <table>
         <tr>
-            <th colspan="8">Arena A</th>
-            <th colspan="8">Arena B</th>
+            {% for arena in current_matches.keys() %}
+                <th colspan="8">{{ arenas[arena].display_name }}</th>
+            {% endfor %}
         </tr>
 
         <tr>

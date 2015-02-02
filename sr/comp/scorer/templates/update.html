@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <h1>{{ match["type"]|title }} scores for match {{ match["num"] }} in arena {{ match["arena"] }}</h1>
+    <h1>{{ match["type"]|title }} scores for match {{ match["num"] }} in arena {{ arenas[match["arena"]].display_name }}</h1>
 
     {% if error %}
         <h2 class="error">{{ error }}</h2>
@@ -17,10 +17,9 @@
         <table class="update_form">
             <tr>
                 <th>Corner</th>
-                <td>0</td>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
+                {% for corner in corners %}
+                <td>{{ corner }}</td>
+                {% endfor %}
             </tr>
 
             <tr>
@@ -29,12 +28,12 @@
 
             <tr>
                 <th>Team (TLA)</th>
-                {% for i in range(4) %}
+                {% for corner in corners %}
                     <td>
-                        {% if match["teams"][i] is not none %}
-                            {{ match["teams"][i] }}
-                            <input type="hidden" name="team_tla_{{ i }}"
-                                   value="{{ match["teams"][i] }}" />
+                        {% if match["teams"][corner] is not none %}
+                            {{ match["teams"][corner] }}
+                            <input type="hidden" name="team_tla_{{ corner }}"
+                                   value="{{ match["teams"][corner] }}" />
                         {% else %}
                             <em>Corner Empty</em>
                         {% endif %}
@@ -44,11 +43,11 @@
 
             <tr>
                 <th>Did the robot exit its corner?</th>
-                {% for i in range(4) %}
+                {% for corner in corners %}
                     <td>
-                        {% if match["teams"][i] is not none %}
-                            <input type="checkbox" name="robot_moved_{{ i }}"
-                                   value="on" {{ "checked" if request.form.get("robot_moved_{}".format(i), False) else "" }} />
+                        {% if match["teams"][corner] is not none %}
+                            <input type="checkbox" name="robot_moved_{{ corner }}"
+                                   value="on" {{ "checked" if request.form.get("robot_moved_{}".format(corner), False) else "" }} />
                         {% endif %}
                     </td>
                 {% endfor %}
@@ -56,11 +55,11 @@
 
             <tr>
                 <th>Was the robot disqualified?</th>
-                {% for i in range(4) %}
+                {% for corner in corners %}
                     <td>
-                        {% if match["teams"][i] is not none %}
-                            <input type="checkbox" name="disqualified_{{ i }}"
-                                   value="on" {{ "checked" if request.form.get("disqualified_{}".format(i), False) else "" }} />
+                        {% if match["teams"][corner] is not none %}
+                            <input type="checkbox" name="disqualified_{{ corner }}"
+                                   value="on" {{ "checked" if request.form.get("disqualified_{}".format(corner), False) else "" }} />
                         {% endif %}
                     </td>
                 {% endfor %}
@@ -68,11 +67,11 @@
 
             <tr>
                 <th>Was the robot absent from this match?</th>
-                {% for i in range(4) %}
+                {% for corner in corners %}
                     <td>
-                        {% if match["teams"][i] is not none %}
-                            <input type="checkbox" name="absent_{{ i }}" value="on"
-                                   {{ "checked" if request.form.get("absent_{}".format(i), False) else "" }} />
+                        {% if match["teams"][corner] is not none %}
+                            <input type="checkbox" name="absent_{{ corner }}" value="on"
+                                   {{ "checked" if request.form.get("absent_{}".format(corner), False) else "" }} />
                         {% endif %}
                     </td>
                 {% endfor %}
@@ -80,11 +79,11 @@
 
             <tr>
                 <th>Number of upright tokens in the arena?</th>
-                {% for i in range(4) %}
+                {% for corner in corners %}
                     <td>
-                        {% if match["teams"][i] is not none %}
-                            <input type="number" name="upright_tokens_{{ i }}"
-                                value="{{ request.form.get("upright_tokens_{}".format(i), 0) }}"
+                        {% if match["teams"][corner] is not none %}
+                            <input type="number" name="upright_tokens_{{ corner }}"
+                                value="{{ request.form.get("upright_tokens_{}".format(corner), 0) }}"
                                 required min="0" max="100" />
                         {% endif %}
                     </td>
@@ -95,10 +94,10 @@
                 <th colspan="5">How many tokens does the team have in each zone?</th>
             </tr>
 
-            {% for j in range(4) %}
+            {% for j in corners %}
                 <tr>
                     <th>Zone {{ j }}</th>
-                    {% for i in range(4) %}
+                    {% for i in corners %}
                         <td>
                             {% if match["teams"][i] is not none %}
                                 <input type="number" name="zone_tokens_{{ j }}_{{ i }}"
@@ -116,11 +115,11 @@
             {% for j in range(8) %}
                 <tr>
                     <th>Slot {{ j }}</th>
-                    {% for i in range(4) %}
+                    {% for corner in corners %}
                         <td>
-                            {% if match["teams"][i] is not none %}
+                            {% if match["teams"][corner] is not none %}
                                 <input type="radio" name="slot_bottoms_{{ j }}"
-                                    value="{{ i }}" {{ "checked" if int(request.form.get("slot_bottoms_{}".format(j), -1)) == i else "" }} />
+                                    value="{{ corner }}" {{ "checked" if int(request.form.get("slot_bottoms_{}".format(j), -1)) == corner else "" }} />
                             {% endif %}
                         </td>
                     {% endfor %}

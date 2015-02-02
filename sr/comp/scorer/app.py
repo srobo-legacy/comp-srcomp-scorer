@@ -193,8 +193,10 @@ def commit_and_push_compstate(match):
 def index():
     comp = get_competition()
     current_matches = {arena: comp.schedule.current_match(arena) for arena in comp.arenas}
-    return flask.render_template("index.html", matches=comp.schedule.matches,
-                                 current_matches=current_matches)
+    return flask.render_template("index.html",
+                                 matches=comp.schedule.matches,
+                                 current_matches=current_matches,
+                                 arenas=comp.arenas)
 
 
 @app.route("/<arena>/<int:num>", methods=["GET", "POST"])
@@ -205,6 +207,10 @@ def update(arena, num):
         match = comp.schedule.matches[num][arena]
     except (IndexError, KeyError):
         return flask.redirect("/")  # TODO: could show an error message here
+
+    template_settings = {'match': match,
+                         'arenas': comp.arenas,
+                         'corners': comp.corners}
 
     if flask.request.method == "GET":
         try:
@@ -217,18 +223,22 @@ def update(arena, num):
         try:
             score = form_to_score(match, flask.request.form)
         except ValueError:
-            return flask.render_template("update.html", match=match,
-                                         error="Invalid input.")
+            return flask.render_template("update.html",
+                                         error="Invalid input.",
+                                         **template_settings)
 
         try:
             reset_and_pull_compstate()
             update_and_validate_compstate(match, score)
             commit_and_push_compstate(match)
         except RuntimeError as e:
-            return flask.render_template("update.html", match=match,
-                                         error=str(e))
+            return flask.render_template("update.html",
+                                         error=str(e),
+                                         **template_settings)
         else:
             return flask.redirect("/{}/{}?done=true".format(arena, num))
 
-    return flask.render_template("update.html", match=match, done=flask.request.args.get("done", False))
+    return flask.render_template("update.html",
+                                 done=flask.request.args.get("done", False),
+                                 **template_settings)
 
