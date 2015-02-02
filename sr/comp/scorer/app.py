@@ -75,27 +75,21 @@ def save_score(match, score):
 
 
 def form_to_score(match, form):
+    detected_flags = 0
+
     def form_team_to_score(zone, teams):
+        nonlocal detected_flags
         tla = form.get("team_tla_{}".format(zone), None)
         if tla:
+            flags = int(form["flags_{}".format(zone)])
             team = {
                 "zone": zone,
                 "disqualified": form.get("disqualified_{}".format(zone), None) is not None,
                 "present": form.get("absent_{}".format(zone), None) is None,
-                "robot_moved": form.get("robot_moved_{}".format(zone), None) is not None,
-                "upright_tokens": int(form["upright_tokens_{}".format(zone)]),
-                "zone_tokens": {},
-                "slot_bottoms": {x: 0 for x in range(8)}
+                "flags": flags
             }
 
-            for i in range(4):
-                v = form["zone_tokens_{}_{}".format(i, zone)]
-                team["zone_tokens"][i] = int(v)
-
-            for i in range(8):
-                selected_zone = int(form.get("slot_bottoms_{}".format(i), -1))
-                if selected_zone == zone:
-                    team["slot_bottoms"][i] = 1
+            detected_flags += flags
 
             teams[tla] = team
 
@@ -104,6 +98,9 @@ def form_to_score(match, form):
     form_team_to_score(1, teams)
     form_team_to_score(2, teams)
     form_team_to_score(3, teams)
+
+    if detected_flags > 5:
+        raise ValueError("Too many flags specified.")
 
     return {
         "arena_id": match.arena,
@@ -120,15 +117,7 @@ def score_to_form(score):
         form["team_tla_{}".format(i)] = tla
         form["disqualified_{}".format(i)] = info.get("disqualified", False)
         form["absent_{}".format(i)] = not info.get("present", True)
-        form["robot_moved_{}".format(i)] = info.get("robot_moved", True)
-        form["upright_tokens_{}".format(i)] = info.get("upright_tokens", True)
-
-        for j in range(4):
-            form["zone_tokens_{}_{}".format(j, i)] = info["zone_tokens"][j]
-
-        for j in range(8):
-            if info["slot_bottoms"][j]:
-                form["slot_bottoms_{}".format(j)] = i
+        form["flags_{}".format(i)] = info.get("flags", True)
 
     return form
 

@@ -42,18 +42,6 @@
             </tr>
 
             <tr>
-                <th>Did the robot exit its corner?</th>
-                {% for corner in corners %}
-                    <td>
-                        {% if match["teams"][corner] is not none %}
-                            <input type="checkbox" name="robot_moved_{{ corner }}"
-                                   value="on" {{ "checked" if request.form.get("robot_moved_{}".format(corner), False) else "" }} />
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
-
-            <tr>
                 <th>Was the robot disqualified?</th>
                 {% for corner in corners %}
                     <td>
@@ -78,53 +66,17 @@
             </tr>
 
             <tr>
-                <th>Number of upright tokens in the arena?</th>
+                <th>Number of flags captured?</th>
                 {% for corner in corners %}
                     <td>
                         {% if match["teams"][corner] is not none %}
-                            <input type="number" name="upright_tokens_{{ corner }}"
-                                value="{{ request.form.get("upright_tokens_{}".format(corner), 0) }}"
-                                required min="0" max="100" />
+                            <input type="number" name="flags_{{ corner }}"
+                                value="{{ request.form.get("flags_{}".format(corner), 0) }}"
+                                required min="0" max="5" />
                         {% endif %}
                     </td>
                 {% endfor %}
             </tr>
-
-            <tr>
-                <th colspan="5">How many tokens does the team have in each zone?</th>
-            </tr>
-
-            {% for j in corners %}
-                <tr>
-                    <th>Zone {{ j }}</th>
-                    {% for i in corners %}
-                        <td>
-                            {% if match["teams"][i] is not none %}
-                                <input type="number" name="zone_tokens_{{ j }}_{{ i }}"
-                                    value="{{ request.form.get("zone_tokens_{}_{}".format(j, i), 0) }}" />
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-
-            <tr>
-                <th colspan="5">Which slot does the team have tokens at the bottom of?</th>
-            </tr>
-
-            {% for j in range(8) %}
-                <tr>
-                    <th>Slot {{ j }}</th>
-                    {% for corner in corners %}
-                        <td>
-                            {% if match["teams"][corner] is not none %}
-                                <input type="radio" name="slot_bottoms_{{ j }}"
-                                    value="{{ corner }}" {{ "checked" if int(request.form.get("slot_bottoms_{}".format(j), -1)) == corner else "" }} />
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
         </table>
 
         <br />
