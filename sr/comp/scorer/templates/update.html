@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <h1>{{ match["type"]|title }} scores for match {{ match["num"] }} in arena {{ arenas[match["arena"]].display_name }}</h1>
+    <h1>{{ match["type"].value | title }} scores for match {{ match["num"] }} in arena {{ arenas[match["arena"]].display_name }}</h1>
 
     {% if error %}
         <h2 class="error">{{ error }}</h2>

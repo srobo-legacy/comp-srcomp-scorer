@@ -1,14 +1,16 @@
-import itertools
 import collections
-import flask
+from datetime import datetime
+import dateutil.tz
 import itertools
 import os
 import os.path
-from sr.comp.comp import SRComp
-from sr.comp.validation import validate
 import subprocess
+
+import flask
 import yaml
 
+from sr.comp.comp import SRComp
+from sr.comp.validation import validate
 
 app = flask.Flask('sr.comp.scorer')
 app.debug = True
@@ -181,7 +183,7 @@ def commit_and_push_compstate(match):
 @app.route("/")
 def index():
     comp = get_competition()
-    current_matches = {arena: comp.schedule.current_match(arena) for arena in comp.arenas}
+    current_matches = {match.arena: match for match in comp.schedule.matches_at(datetime.now(dateutil.tz.tzlocal()))}
     return flask.render_template("index.html",
                                  matches=comp.schedule.matches,
                                  current_matches=current_matches,
@@ -230,4 +232,3 @@ def update(arena, num):
     return flask.render_template("update.html",
                                  done=flask.request.args.get("done", False),
                                  **template_settings)
-
