@@ -35,8 +35,12 @@
         {% for match_group in grouper(matches, 8) %}
             <tr>
                 {% for arena, matches in group_list_dict(match_group, arenas).items() %}
-                    {% for match in matches %}
-                        {{ match_cell(match) }}
+                    {% for match_key in range(8) %}
+                        {% if (matches|length) > match_key %}
+                            {{ match_cell(matches[match_key]) }}
+                        {% else %}
+                            <td></td>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
             </tr>
