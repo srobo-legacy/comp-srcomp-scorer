@@ -7,6 +7,7 @@ import os.path
 import subprocess
 
 import flask
+from flask import url_for
 import yaml
 
 from sr.comp.comp import SRComp
@@ -228,7 +229,8 @@ def update(arena, num):
                                          error=str(e),
                                          **template_settings)
         else:
-            return flask.redirect("/{}/{}?done=true".format(arena, num))
+            return flask.redirect(url_for('update', arena=arena, num=num) +
+                                  '?done=true')
 
     return flask.render_template("update.html",
                                  done=flask.request.args.get("done", False),
