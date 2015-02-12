@@ -17,14 +17,18 @@
 {% block main %}
     <table>
         <tr>
-            {% for arena in current_matches.keys() %}
-                <th colspan="8">{{ arenas[arena].display_name }}</th>
+            {% for arena, arena_settings in arenas.items() %}
+                <th colspan="8">{{ arena_settings.display_name }}</th>
             {% endfor %}
         </tr>
 
         <tr>
-            {% for match in current_matches.values() %}
-                {{ match_cell(match, colspan=8, current_match=True) }}
+            {% for arena in arenas %}
+                {% if arena in current_matches %}
+                  {{ match_cell(current_matches[arena], colspan=8, current_match=True) }}
+                {% else %}
+                  <td colspan="8"></td>
+                {% endif %}
             {% endfor %}
         </tr>
 
