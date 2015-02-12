@@ -26,7 +26,7 @@ def grouper(iterable, n, fillvalue=None):
 app.jinja_env.globals.update(grouper=grouper)
 
 
-def group_list_dict(matches):
+def group_list_dict(matches, keys):
     """
     Group a list of dictionaries into a dictionary of lists.
 
@@ -35,9 +35,12 @@ def group_list_dict(matches):
     into
         {"A": [a, a2], "B": [b, b2]}
     """
-    target = collections.defaultdict(list)
-    for k, v in itertools.chain.from_iterable(d.items() if d else [] for d in matches):
-        target[k].append(v)
+    target = collections.OrderedDict((key, []) for key in keys)
+    for entry in matches:
+        if entry is None:
+            continue
+        for key, value in entry.items():
+            target[key].append(value)
     return target
 app.jinja_env.globals.update(group_list_dict=group_list_dict)
 

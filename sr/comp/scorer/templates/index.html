@@ -32,9 +32,9 @@
             {% endfor %}
         </tr>
 
-        {% for group in map(group_list_dict, grouper(matches, 8)) %}
+        {% for match_group in grouper(matches, 8) %}
             <tr>
-                {% for arena, matches in group.items() %}
+                {% for arena, matches in group_list_dict(match_group, arenas).items() %}
                     {% for match in matches %}
                         {{ match_cell(match) }}
                     {% endfor %}
