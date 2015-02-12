@@ -51,7 +51,8 @@ app.jinja_env.globals.update(is_match_done=is_match_done)
 
 
 def get_score_path(match):
-    return "{0}/{1}/{2}/{3:0>3}.yaml".format(app.config['COMPSTATE'], match.type,
+    return "{0}/{1}/{2}/{3:0>3}.yaml".format(app.config['COMPSTATE'],
+                                             match.type.value,
                                              match.arena, match.num)
 
 
