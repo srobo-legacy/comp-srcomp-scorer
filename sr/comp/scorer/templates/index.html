@@ -7,7 +7,7 @@
                 {% if current_match %}
                     Current Match {{ match['num'] }} — <em>{{ match['teams'] | join(', ') }}</em>
                 {% else %}
-                    {{ match["num"] }}
+                    {{ '{0:03d}'.format(match['num']) }}
                 {% endif %}
             </a>
         {% endif %}
@@ -15,10 +15,10 @@
 {% endmacro %}
 
 {% block main %}
-    <table>
+    <table class="match-choice">
         <tr>
             {% for arena, arena_settings in arenas.items() %}
-                <th colspan="8">{{ arena_settings.display_name }}</th>
+                <th colspan="8">Arena {{ arena_settings.display_name }}</th>
             {% endfor %}
         </tr>
 
