@@ -1,3 +1,2 @@
 recursive-include sr/comp/scorer/templates *.html
 recursive-include sr/comp/scorer/static *.png *.css
-
