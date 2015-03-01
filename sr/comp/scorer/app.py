@@ -25,6 +25,11 @@ def grouper(iterable, n, fillvalue=None):
     return itertools.zip_longest(fillvalue=fillvalue, *args)
 app.jinja_env.globals.update(grouper=grouper)
 
+def parse_hex_colour(string):
+    string = string.strip('#')
+    return int(string[:2], 16), int(string[2:4], 16), int(string[4:], 16)
+app.jinja_env.globals.update(parse_hex_colour=parse_hex_colour)
+
 
 def group_list_dict(matches, keys):
     """
@@ -42,7 +47,6 @@ def group_list_dict(matches, keys):
         for key, value in entry.items():
             target[key].append(value)
     return target
-app.jinja_env.globals.update(group_list_dict=group_list_dict)
 
 
 def is_match_done(match):
@@ -188,11 +192,11 @@ def commit_and_push_compstate(match):
 @app.route("/")
 def index():
     comp = get_competition()
+    all_matches = group_list_dict(comp.schedule.matches, comp.arenas.keys())
     current_matches = {match.arena: match for match in comp.schedule.matches_at(datetime.now(dateutil.tz.tzlocal()))}
-    return flask.render_template("index.html",
-                                 matches=comp.schedule.matches,
+    return flask.render_template('index.html', all_matches=all_matches,
                                  current_matches=current_matches,
-                                 arenas=comp.arenas)
+                                 arenas=comp.arenas.values())
 
 
 @app.route("/<arena>/<int:num>", methods=["GET", "POST"])

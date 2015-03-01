@@ -14,36 +14,37 @@
     </td>
 {% endmacro %}
 
-{% block main %}
-    <table class="match-choice">
+{% macro arena_table(arena, matches, width=8) %}
+    {% set r, g, b = parse_hex_colour(arena.colour) %}
+    <table class="match-choice" style="background: rgba({{ r }}, {{ b }}, {{ g }}, 0.05)">
         <tr>
-            {% for arena, arena_settings in arenas.items() %}
-                <th colspan="8">Arena {{ arena_settings.display_name }}</th>
-            {% endfor %}
+            <th colspan="{{ width }}">Arena {{ arena.display_name }}</th>
         </tr>
 
         <tr>
-            {% for arena in arenas %}
-                {% if arena in current_matches %}
-                  {{ match_cell(current_matches[arena], colspan=8, current_match=True) }}
-                {% else %}
-                  <td colspan="8"></td>
-                {% endif %}
-            {% endfor %}
+            {% if arena in current_matches %}
+                {{ match_cell(current_matches[arena], colspan=width, current_match=True) }}
+            {% else %}
+                <td colspan="{{ width }}"></td>
+            {% endif %}
         </tr>
 
-        {% for match_group in grouper(matches, 8) %}
+        {% for match_group in grouper(matches, width) %}
             <tr>
-                {% for arena, matches in group_list_dict(match_group, arenas).items() %}
-                    {% for match_key in range(8) %}
-                        {% if (matches | length) > match_key %}
-                            {{ match_cell(matches[match_key]) }}
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                    {% endfor %}
+                {% for match_key in range(width) %}
+                    {% if (match_group | length) > match_key %}
+                        {{ match_cell(match_group[match_key]) }}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
     </table>
+{% endmacro %}
+
+{% block main %}
+    {% for arena in arenas %}
+        {{ arena_table(arena, all_matches[arena.name]) }}
+    {% endfor %}
 {% endblock %}
