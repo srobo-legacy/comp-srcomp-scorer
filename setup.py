@@ -16,4 +16,5 @@ setup(name='sr.comp.scorer',
       author='Student Robotics Competition Software SIG',
       author_email='srobo-devel@googlegroups.com',
       install_requires=['PyYAML >=3.11, <4',
+                        'Flask >=0.10, <0.11',
                         'sr.comp >=1.0, <2'])
