@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
 
-        <title>SR Competition Scorer</title>
+        <title>Student Robotics Competition Scorer</title>
 
         <link href="{{ url_for('static', filename='images/icon.png') }}" type="image/png" rel="icon" />
 
@@ -18,17 +18,10 @@
             <a href="{{ url_for('.index') }}">
                 <h1>
                     <img src="{{ url_for('static', filename='images/logo.png') }}" />
-                    SR Competition Scorer
+                    Student Robotics Competition Scorer
                 </h1>
             </a>
         </header>
-
-        <nav>
-            <ul>
-                {% block nav %}
-                {% endblock %}
-            </ul>
-        </nav>
 
         <main>
             {% block main %}

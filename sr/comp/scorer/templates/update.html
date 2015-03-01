@@ -1,9 +1,5 @@
 {% extends "_base.html" %}
 
-{% block nav %}
-    <li><a href="{{ url_for('.index') }}">Back to Home</a></li>
-{% endblock %}
-
 {% block main %}
     <h1>{{ match["type"].value | title }} scores for match {{ match["num"] }} in arena {{ arenas[match["arena"]].display_name }}</h1>
 
