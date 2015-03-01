@@ -7,10 +7,11 @@ import os.path
 import subprocess
 
 import flask
-from flask import url_for
+from flask import g, url_for
 import yaml
 
 from sr.comp.comp import SRComp
+from sr.comp.raw_compstate import RawCompstate
 from sr.comp.validation import validate
 
 app = flask.Flask('sr.comp.scorer')
@@ -51,38 +52,11 @@ def group_list_dict(matches, keys):
 
 def is_match_done(match):
     try:
-        load_score(match)
+        g.compstate.load_score(match)
         return True
     except IOError:
         return False
 app.jinja_env.globals.update(is_match_done=is_match_done)
-
-
-def get_score_path(match):
-    return "{0}/{1}/{2}/{3:0>3}.yaml".format(app.config['COMPSTATE'],
-                                             match.type.value,
-                                             match.arena, match.num)
-
-
-def get_competition():
-    return SRComp(app.config['COMPSTATE'])
-
-
-def load_score(match):
-    path = get_score_path(match)
-    with open(path) as fd:
-        return yaml.safe_load(fd)
-
-
-def save_score(match, score):
-    path = get_score_path(match)
-
-    dirname = os.path.dirname(path)
-    if not os.path.exists(dirname):
-        os.makedirs(dirname)
-
-    with open(path, "w") as fd:
-        yaml.safe_dump(score, fd, default_flow_style=False)
 
 
 def form_to_score(match, form):
@@ -132,40 +106,18 @@ def score_to_form(score):
 
     return form
 
+def update_and_validate(compstate, match, score):
+    compstate.save_score(match, score)
 
-def reset_compstate():
-    try:
-        subprocess.check_call(["git", "reset", "--hard", "HEAD"],
-                              cwd=app.config['COMPSTATE'])
-    except (OSError, subprocess.CalledProcessError):
-        raise RuntimeError("Git reset failed.")
-
-
-def reset_and_pull_compstate():
-    reset_compstate()
-
-    if app.config['COMPSTATE_LOCAL']:
-        return
+    path = compstate.get_score_path(match)
+    compstate.stage(path)
 
     try:
-        subprocess.check_call(["git", "pull", "--ff-only", "origin", "master"],
-                              cwd=app.config['COMPSTATE'])
-    except (OSError, subprocess.CalledProcessError):
-        raise RuntimeError("Git pull failed, deal with the merge manually.")
-
-
-def update_and_validate_compstate(match, score):
-    save_score(match, score)
-
-    path = get_score_path(match)
-    subprocess.check_call(["git", "add", os.path.realpath(path)], cwd=app.config['COMPSTATE'])
-
-    try:
-        comp = get_competition()
+        comp = compstate.load()
     except Exception as e:  # SRComp sometimes throws generic Exceptions
         # we have to reset the repo because SRComp fails to instantiate and that
         # would break everything!
-        reset_compstate()
+        compstate.reset_hard()
         raise RuntimeError(e)
     else:
         i = validate(comp)
@@ -173,25 +125,23 @@ def update_and_validate_compstate(match, score):
             raise RuntimeError(str(i))
 
 
-def commit_and_push_compstate(match):
+def commit_and_push(compstate, match):
     commit_msg = "update {} scores for match {} in arena {}".format(match.type.value,
                                                                     match.num,
                                                                     match.arena)
 
-    try:
-        subprocess.check_call(["git", "commit", "-m", commit_msg],
-                            cwd=app.config['COMPSTATE'])
-        if app.config['COMPSTATE_LOCAL']:
-            return
-        subprocess.check_call(["git", "push", "origin", "master"],
-                            cwd=app.config['COMPSTATE'])
-    except (OSError, subprocess.CalledProcessError):
-        raise RuntimeError("Git push failed, deal with the merge manually.")
+    compstate.commit_and_push(commit_msg)
 
+
+@app.before_request
+def before_request():
+    cs_path = os.path.realpath(app.config["COMPSTATE"])
+    local_only = app.config['COMPSTATE_LOCAL']
+    g.compstate = RawCompstate(cs_path, local_only)
 
 @app.route("/")
 def index():
-    comp = get_competition()
+    comp = g.compstate.load()
     all_matches = group_list_dict(comp.schedule.matches, comp.arenas.keys())
     current_matches = {match.arena: match for match in comp.schedule.matches_at(datetime.now(dateutil.tz.tzlocal()))}
     return flask.render_template('index.html', all_matches=all_matches,
@@ -201,7 +151,8 @@ def index():
 
 @app.route("/<arena>/<int:num>", methods=["GET", "POST"])
 def update(arena, num):
-    comp = get_competition()
+    compstate = g.compstate
+    comp = compstate.load()
 
     try:
         match = comp.schedule.matches[num][arena]
@@ -214,7 +165,7 @@ def update(arena, num):
 
     if flask.request.method == "GET":
         try:
-            score = load_score(match)
+            score = compstate.load_score(match)
         except IOError:
             pass
         else:
@@ -228,9 +179,9 @@ def update(arena, num):
                                          **template_settings)
 
         try:
-            reset_and_pull_compstate()
-            update_and_validate_compstate(match, score)
-            commit_and_push_compstate(match)
+            compstate.reset_and_fast_forward()
+            update_and_validate(compstate, match, score)
+            commit_and_push(compstate, match)
         except RuntimeError as e:
             return flask.render_template("update.html",
                                          error=str(e),
