@@ -3,9 +3,9 @@
 {% macro match_cell(match, colspan=1, current_match=False) %}
     <td colspan="{{ colspan }}">
         {% if match is not none %}
-            <a href="{{ url_for('.update', arena = match['arena'], num = match['num']) }}" class="{{ "done" if is_match_done(match) else "" }}">
+            <a href="{{ url_for('.update', arena=match['arena'], num=match['num']) }}" class="{{ 'done' if is_match_done(match) else '' }}">
                 {% if current_match %}
-                    Current Match {{ match["num"] }} &mdash; <em>{{ match["teams"]|join(", ") }}</em>
+                    Current Match {{ match['num'] }} — <em>{{ match['teams'] | join(', ') }}</em>
                 {% else %}
                     {{ match["num"] }}
                 {% endif %}
@@ -36,7 +36,7 @@
             <tr>
                 {% for arena, matches in group_list_dict(match_group, arenas).items() %}
                     {% for match_key in range(8) %}
-                        {% if (matches|length) > match_key %}
+                        {% if (matches | length) > match_key %}
                             {{ match_cell(matches[match_key]) }}
                         {% else %}
                             <td></td>

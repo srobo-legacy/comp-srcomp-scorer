@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 
 {% block main %}
-    <h1>{{ match["type"].value | title }} scores for match {{ match["num"] }} in arena {{ arenas[match["arena"]].display_name }}</h1>
+    <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
 
     {% if error %}
         <h2 class="error">{{ error }}</h2>
@@ -14,7 +14,7 @@
             <tr>
                 <th>Corner</th>
                 {% for corner in corners %}
-                <td>{{ corner }}</td>
+                    <td>{{ corner }}</td>
                 {% endfor %}
             </tr>
 
@@ -26,10 +26,10 @@
                 <th>Team (TLA)</th>
                 {% for corner in corners %}
                     <td>
-                        {% if match["teams"][corner] is not none %}
-                            {{ match["teams"][corner] }}
+                        {% if match['teams'][corner] is not none %}
+                            {{ match['teams'][corner] }}
                             <input type="hidden" name="team_tla_{{ corner }}"
-                                   value="{{ match["teams"][corner] }}" />
+                                   value="{{ match['teams'][corner] }}" />
                         {% else %}
                             <em>Corner Empty</em>
                         {% endif %}
@@ -41,9 +41,9 @@
                 <th>Was the robot disqualified?</th>
                 {% for corner in corners %}
                     <td>
-                        {% if match["teams"][corner] is not none %}
+                        {% if match['teams'][corner] is not none %}
                             <input type="checkbox" name="disqualified_{{ corner }}"
-                                   value="on" {{ "checked" if request.form.get("disqualified_{}".format(corner), False) else "" }} />
+                                   value="on" {{ 'checked' if request.form.get('disqualified_{}'.format(corner), False) else '' }} />
                         {% endif %}
                     </td>
                 {% endfor %}
@@ -55,7 +55,7 @@
                     <td>
                         {% if match["teams"][corner] is not none %}
                             <input type="checkbox" name="absent_{{ corner }}" value="on"
-                                   {{ "checked" if request.form.get("absent_{}".format(corner), False) else "" }} />
+                                   {{ 'checked' if request.form.get('absent_{}'.format(corner), False) else '' }} />
                         {% endif %}
                     </td>
                 {% endfor %}
@@ -67,7 +67,7 @@
                     <td>
                         {% if match["teams"][corner] is not none %}
                             <input type="number" name="flags_{{ corner }}"
-                                value="{{ request.form.get("flags_{}".format(corner), 0) }}"
+                                value="{{ request.form.get('flags_{}'.format(corner), 0) }}"
                                 required min="0" max="5" />
                         {% endif %}
                     </td>
