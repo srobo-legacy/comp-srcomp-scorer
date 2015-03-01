@@ -4,12 +4,11 @@ body {
     line-height: 1.2;
 
     margin: 0;
-    padding: 4em 6em;
+    padding: 2em 5em;
 }
 
 header {
-    margin-bottom: 2em;
-    padding-bottom: 2em;
+    padding: 1em 1em 2em 1em;
     border-bottom: 1px solid rgb(220, 220, 220);
 }
 
@@ -29,7 +28,7 @@ header h1 > img {
 }
 
 main {
-    margin-top: 2em;
+    padding: 2em 1em 1em 1em;
 }
 
 h1,
