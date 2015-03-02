@@ -5,7 +5,6 @@ import itertools
 import os
 
 import flask
-from flask import g, url_for
 
 from sr.comp.raw_compstate import RawCompstate
 from sr.comp.validation import validate
@@ -52,7 +51,7 @@ def group_list_dict(matches, keys):
 
 
 def is_match_done(match):
-    path = g.compstate.get_score_path(match)
+    path = flask.g.compstate.get_score_path(match)
     return os.path.exists(path)
 app.jinja_env.globals.update(is_match_done=is_match_done)
 
@@ -143,12 +142,12 @@ def calculate_unclaimed_flags(score_sheet):
 def before_request():
     cs_path = os.path.realpath(app.config['COMPSTATE'])
     local_only = app.config['COMPSTATE_LOCAL']
-    g.compstate = RawCompstate(cs_path, local_only)
+    flask.g.compstate = RawCompstate(cs_path, local_only)
 
 
 @app.route('/')
 def index():
-    comp = g.compstate.load()
+    comp = flask.g.compstate.load()
     all_matches = group_list_dict(comp.schedule.matches, comp.arenas.keys())
     now = datetime.now(dateutil.tz.tzlocal())
     current_matches = {match.arena: match
@@ -160,7 +159,7 @@ def index():
 
 @app.route('/<arena>/<int:num>', methods=['GET', 'POST'])
 def update(arena, num):
-    compstate = g.compstate
+    compstate = flask.g.compstate
     comp = compstate.load()
 
     try:
@@ -197,8 +196,8 @@ def update(arena, num):
                                          error=str(e),
                                          **template_settings)
         else:
-            return flask.redirect(url_for('update', arena=arena, num=num) +
-                                  '?done=true')
+            url = flask.url_for('update', arena=arena, num=num) + '?done=true'
+            return flask.redirect(url)
 
     return flask.render_template('update.html',
                                  done=flask.request.args.get('done', False),
