@@ -118,13 +118,13 @@ def update_and_validate(compstate, match, score):
         comp = compstate.load()
     except Exception as e:
         # SRComp sometimes throws generic Exceptions. We have to reset the repo
-        # because if SRComp fails to instantiate, that would break everything!
+        # because if SRComp fails to instantiate, it would break everything!
         compstate.reset_hard()
         raise RuntimeError(e)
     else:
         i = validate(comp)
         if i > 0:
-            raise RuntimeError(str(i))
+            raise RuntimeError('{} errors occured.'.format(i))
 
 
 def commit_and_push(compstate, match):
