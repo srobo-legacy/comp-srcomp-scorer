@@ -6,6 +6,8 @@
 
 {% block main %}
     <div class="score-sheet">
+        <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
+
         {% if error %}
             <h2 class="error">{{ error }}</h2>
         {% elif done %}
@@ -13,8 +15,6 @@
         {% endif %}
 
         <form method="POST">
-            <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
-
             <svg xmlns="http://www.w3.org/2000/svg" height="675.65" width="675.65" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g transform="translate(-34.223 -267.04)">
                     <g transform="matrix(.84245 0 0 .84245 -7.0574 97.403)">

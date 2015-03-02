@@ -1,9 +1,20 @@
 .score-sheet {
     background: rgb(250, 250, 250);
     padding: 0.8em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .score-sheet h1 {
-    margin: 0.2em 0 1em 0;
-    text-align: center;
+    margin-top: 0.2em;
+}
+
+.score-sheet h2 {
+    margin-top: 0.3em;
+}
+
+.score-sheet form {
+    margin-top: 1em;
 }
