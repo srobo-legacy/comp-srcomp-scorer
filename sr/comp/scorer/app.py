@@ -34,9 +34,9 @@ def group_list_dict(matches, keys):
     Group a list of dictionaries into a dictionary of lists.
 
     This will convert
-        [{"A": a, "B": b}, {"A": a2, "B": b2}]
+        [{'A': a, 'B': b}, {'A': a2, 'B': b2}]
     into
-        {"A": [a, a2], "B": [b, b2]}
+        {'A': [a, a2], 'B': [b, b2]}
     """
     target = collections.OrderedDict((key, []) for key in keys)
     for entry in matches:
@@ -61,14 +61,16 @@ def form_to_score(match, form):
 
     def form_team_to_score(zone, teams):
         nonlocal detected_flags
-        tla = form.get("team_tla_{}".format(zone), None)
+        tla = form.get('team_tla_{}'.format(zone), None)
         if tla:
-            flags = int(form["flags_{}".format(zone)])
+            flags = int(form['flags_{}'.format(zone)])
             team = {
-                "zone": zone,
-                "disqualified": form.get("disqualified_{}".format(zone), None) is not None,
-                "present": form.get("present_{}".format(zone), None) is not None,
-                "flags": flags
+                'zone': zone,
+                'disqualified':
+                    form.get('disqualified_{}'.format(zone), None) is not None,
+                'present':
+                    form.get('present_{}'.format(zone), None) is not None,
+                'flags': flags
             }
 
             detected_flags += flags
@@ -82,12 +84,12 @@ def form_to_score(match, form):
     form_team_to_score(3, teams)
 
     if detected_flags > 5:
-        raise ValueError("Too many flags specified.")
+        raise ValueError('Too many flags specified.')
 
     return {
-        "arena_id": match.arena,
-        "match_number": match.num,
-        "teams": teams
+        'arena_id': match.arena,
+        'match_number': match.num,
+        'teams': teams
     }
 
 
@@ -103,6 +105,7 @@ def score_to_form(score):
 
     return form
 
+
 def update_and_validate(compstate, match, score):
     compstate.save_score(match, score)
 
@@ -111,9 +114,9 @@ def update_and_validate(compstate, match, score):
 
     try:
         comp = compstate.load()
-    except Exception as e:  # SRComp sometimes throws generic Exceptions
-        # we have to reset the repo because SRComp fails to instantiate and that
-        # would break everything!
+    except Exception as e:
+        # SRComp sometimes throws generic Exceptions. We have to reset the repo
+        # because if SRComp fails to instantiate, that would break everything!
         compstate.reset_hard()
         raise RuntimeError(e)
     else:
@@ -131,21 +134,24 @@ def commit_and_push(compstate, match):
 
 @app.before_request
 def before_request():
-    cs_path = os.path.realpath(app.config["COMPSTATE"])
+    cs_path = os.path.realpath(app.config['COMPSTATE'])
     local_only = app.config['COMPSTATE_LOCAL']
     g.compstate = RawCompstate(cs_path, local_only)
 
-@app.route("/")
+
+@app.route('/')
 def index():
     comp = g.compstate.load()
     all_matches = group_list_dict(comp.schedule.matches, comp.arenas.keys())
-    current_matches = {match.arena: match for match in comp.schedule.matches_at(datetime.now(dateutil.tz.tzlocal()))}
+    now = datetime.now(dateutil.tz.tzlocal())
+    current_matches = {match.arena: match
+                       for match in comp.schedule.matches_at(now)}
     return flask.render_template('index.html', all_matches=all_matches,
                                  current_matches=current_matches,
                                  arenas=comp.arenas.values())
 
 
-@app.route("/<arena>/<int:num>", methods=["GET", "POST"])
+@app.route('/<arena>/<int:num>', methods=['GET', 'POST'])
 def update(arena, num):
     compstate = g.compstate
     comp = compstate.load()
@@ -153,25 +159,25 @@ def update(arena, num):
     try:
         match = comp.schedule.matches[num][arena]
     except (IndexError, KeyError):
-        return flask.redirect("/")  # TODO: could show an error message here
+        return flask.redirect('/')  # TODO: could show an error message here
 
     template_settings = {'match': match,
                          'arenas': comp.arenas,
                          'corners': comp.corners}
 
-    if flask.request.method == "GET":
+    if flask.request.method == 'GET':
         try:
             score = compstate.load_score(match)
         except IOError:
             pass
         else:
             flask.request.form = score_to_form(score)
-    elif flask.request.method == "POST":
+    elif flask.request.method == 'POST':
         try:
             score = form_to_score(match, flask.request.form)
         except ValueError:
-            return flask.render_template("update.html",
-                                         error="Invalid input.",
+            return flask.render_template('update.html',
+                                         error='Invalid input.',
                                          **template_settings)
 
         try:
@@ -179,13 +185,13 @@ def update(arena, num):
             update_and_validate(compstate, match, score)
             commit_and_push(compstate, match)
         except RuntimeError as e:
-            return flask.render_template("update.html",
+            return flask.render_template('update.html',
                                          error=str(e),
                                          **template_settings)
         else:
             return flask.redirect(url_for('update', arena=arena, num=num) +
                                   '?done=true')
 
-    return flask.render_template("update.html",
-                                 done=flask.request.args.get("done", False),
+    return flask.render_template('update.html',
+                                 done=flask.request.args.get('done', False),
                                  **template_settings)
