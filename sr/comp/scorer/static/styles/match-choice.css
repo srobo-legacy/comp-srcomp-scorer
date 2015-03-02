@@ -1,9 +1,7 @@
-table.match-choice td {
-    text-align: center;
-}
-
+table.match-choice td,
 table.match-choice th {
     text-align: center;
+    padding: 0.4em;
 }
 
 table.match-choice td a {

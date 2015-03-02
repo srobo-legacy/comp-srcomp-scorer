@@ -39,12 +39,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: bold;
     margin: 10px 0;
-}
-
-h1 {
-    font-size: 2em;
 }
 
 a {
@@ -56,16 +51,11 @@ a:hover {
     text-decoration: underline;
 }
 
-ul.grid li {
-    display: inline-block;
-    margin: 12px;
-}
-
 input, select, textarea {
     box-sizing: border-box;
 }
 
-input:not([type="submit"]), select, textarea {
+input:not([type="submit"]) {
     background: rgb(255, 255, 255);
     color: rgb(50, 50, 50);
     border: 1px solid rgb(220, 220, 220);
@@ -100,40 +90,13 @@ input[type=submit]:active, button:active {
     box-shadow: inset 0 0 2px 4px rgb(240, 240, 240), 0 1px 0 0 rgb(235, 235, 235);
 }
 
-label {
-    margin-right: 10px;
-    font-weight: bold;
-    display: inline-block;
-    width: 140px;
-    text-align: right;
-}
-
-strong {
-    font-weight: bold;
-}
-
-em {
-    font-style: italic;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
 th {
-    font-weight: bold;
     text-align: left;
     font-size: 1.2em;
 }
 
-td, th {
-    padding: 0.5em;
-}
-
 .error {
     color: red;
-    font-weight: bold;
 }
 
 .done {
