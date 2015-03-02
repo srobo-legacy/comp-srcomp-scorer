@@ -166,7 +166,7 @@ def update(arena, num):
     try:
         match = comp.schedule.matches[num][arena]
     except (IndexError, KeyError):
-        return flask.redirect('/')  # TODO: could show an error message here
+        flask.abort(404)
 
     template_settings = {'match': match,
                          'arenas': comp.arenas,
