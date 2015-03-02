@@ -134,6 +134,14 @@ def commit_and_push(compstate, match):
     compstate.commit_and_push(commit_msg)
 
 
+def calculate_unclaimed_flags(score_sheet):
+    unclaimed_flags = 5
+    for tla, scores in score_sheet['teams'].items():
+        unclaimed_flags -= scores['flags']
+    assert unclaimed_flags > 0
+    return unclaimed_flags
+
+
 @app.before_request
 def before_request():
     cs_path = os.path.realpath(app.config['COMPSTATE'])
@@ -174,6 +182,8 @@ def update(arena, num):
             pass
         else:
             flask.request.form = score_to_form(score)
+            flask.request.form['unclaimed_flags'] = \
+                calculate_unclaimed_flags(score)
     elif flask.request.method == 'POST':
         try:
             score = form_to_score(match, flask.request.form)
