@@ -61,7 +61,7 @@ def form_to_score(match, form):
 
     def form_team_to_score(zone, teams):
         nonlocal detected_flags
-        tla = form.get('team_tla_{}'.format(zone), None)
+        tla = form.get('tla_{}'.format(zone), None)
         if tla:
             flags = int(form['flags_{}'.format(zone)])
             team = {
@@ -96,7 +96,7 @@ def score_to_form(score):
 
     for tla, info in score['teams'].items():
         i = info['zone']
-        form['team_tla_{}'.format(i)] = tla
+        form['tla_{}'.format(i)] = tla
         form['disqualified_{}'.format(i)] = info.get('disqualified', False)
         form['present_{}'.format(i)] = info.get('present', True)
         form['flags_{}'.format(i)] = info.get('flags', 0)
