@@ -13,7 +13,6 @@ from sr.comp.validation import validate
 
 app = flask.Flask('sr.comp.scorer')
 app.debug = True
-app.jinja_env.globals.update(int=int, map=map)
 
 
 def grouper(iterable, n, fillvalue=None):
