@@ -82,13 +82,11 @@ def form_to_score(match, form):
             teams[tla] = team
 
     teams = {}
-    form_team_to_score(0, teams)
-    form_team_to_score(1, teams)
-    form_team_to_score(2, teams)
-    form_team_to_score(3, teams)
+    for i in range(4):
+        form_team_to_score(i, teams)
 
-    if detected_flags > 5:
-        raise ValueError('Too many flags specified.')
+    if detected_flags + int(form.get('unclaimed_flags', 0)) != 5:
+        raise ValueError("Total number of flags doesn't add up to five.")
 
     return {
         'arena_id': match.arena,
