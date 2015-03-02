@@ -1,0 +1,17 @@
+table.match-choice td {
+    text-align: center;
+}
+
+table.match-choice th {
+    text-align: center;
+}
+
+table.match-choice td a {
+    display: block;
+    padding: 0.4em 0.8em;
+}
+
+table.match-choice td a:hover {
+    background: rgb(210, 210, 210);
+    text-decoration: none;
+}

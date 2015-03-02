@@ -131,37 +131,6 @@ td, th {
     padding: 0.5em;
 }
 
-table.match-choice td {
-    text-align: center;
-}
-
-table.match-choice th {
-    text-align: center;
-}
-
-table.match-choice td a {
-    display: block;
-    padding: 0.4em 0.8em;
-}
-
-table.match-choice td a:hover {
-    background: rgb(210, 210, 210);
-    text-decoration: none;
-}
-
-table.update_form {
-    border: 1px solid rgb(0, 0, 0);
-}
-
-table.update_form td, table.update_form th {
-    border: 1px solid rgb(0, 0, 0);
-    white-space: nowrap;
-}
-
-table.update_form th:not(:only-child) {
-    text-align: right;
-}
-
 .error {
     color: red;
     font-weight: bold;
