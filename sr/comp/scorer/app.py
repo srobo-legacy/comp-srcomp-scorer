@@ -3,16 +3,13 @@ from datetime import datetime
 import dateutil.tz
 import itertools
 import os
-import os.path
-import subprocess
 
 import flask
 from flask import g, url_for
-import yaml
 
-from sr.comp.comp import SRComp
 from sr.comp.raw_compstate import RawCompstate
 from sr.comp.validation import validate
+
 
 app = flask.Flask('sr.comp.scorer')
 app.debug = True
