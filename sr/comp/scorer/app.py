@@ -16,11 +16,16 @@ app.debug = True
 
 
 def grouper(iterable, n, fillvalue=None):
-    "Collect data into fixed-length chunks or blocks"
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+    """
+    Collect data into fixed-length chunks or blocks.
+
+    >>> grouper('ABCDEFG', 3, 'x')
+    ['ABC', 'DEF', 'Gxx']
+    """
     args = [iter(iterable)] * n
     return itertools.zip_longest(fillvalue=fillvalue, *args)
 app.jinja_env.globals.update(grouper=grouper)
+
 
 def parse_hex_colour(string):
     string = string.strip('#')
