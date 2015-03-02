@@ -67,7 +67,7 @@ def form_to_score(match, form):
             team = {
                 "zone": zone,
                 "disqualified": form.get("disqualified_{}".format(zone), None) is not None,
-                "present": form.get("absent_{}".format(zone), None) is None,
+                "present": form.get("present_{}".format(zone), None) is not None,
                 "flags": flags
             }
 
@@ -94,12 +94,12 @@ def form_to_score(match, form):
 def score_to_form(score):
     form = {}
 
-    for tla, info in score["teams"].items():
-        i = info["zone"]
-        form["team_tla_{}".format(i)] = tla
-        form["disqualified_{}".format(i)] = info.get("disqualified", False)
-        form["absent_{}".format(i)] = not info.get("present", True)
-        form["flags_{}".format(i)] = info.get("flags", True)
+    for tla, info in score['teams'].items():
+        i = info['zone']
+        form['team_tla_{}'.format(i)] = tla
+        form['disqualified_{}'.format(i)] = info.get('disqualified', False)
+        form['present_{}'.format(i)] = info.get('present', True)
+        form['flags_{}'.format(i)] = info.get('flags', 0)
 
     return form
 
@@ -123,9 +123,8 @@ def update_and_validate(compstate, match, score):
 
 
 def commit_and_push(compstate, match):
-    commit_msg = "update {} scores for match {} in arena {}".format(match.type.value,
-                                                                    match.num,
-                                                                    match.arena)
+    commit_msg = 'Update {} scores for match {} in arena {}' \
+        .format(match.type.value, match.num, match.arena)
 
     compstate.commit_and_push(commit_msg)
 

@@ -1,83 +1,130 @@
 {% extends "_base.html" %}
 
+{% block head %}
+    <link href="{{ url_for('static', filename='styles/score-sheet.css') }}" rel="stylesheet" />
+{% endblock %}
+
 {% block main %}
-    <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
+    <div class="score-sheet">
+        {% if error %}
+            <h2 class="error">{{ error }}</h2>
+        {% elif done %}
+            <h2 class="done">Scores updated successfully.</h2>
+        {% endif %}
 
-    {% if error %}
-        <h2 class="error">{{ error }}</h2>
-    {% elif done %}
-        <h2 class="done">Scores updated successfully.</h2>
-    {% endif %}
+        <form method="POST">
+            <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
 
-    <form method="POST">
-        <table class="update_form">
-            <tr>
-                <th>Corner</th>
-                {% for corner in corners %}
-                    <td>{{ corner }}</td>
-                {% endfor %}
-            </tr>
+            <svg xmlns="http://www.w3.org/2000/svg" height="675.65" width="675.65" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g transform="translate(-34.223 -267.04)">
+                    <g transform="matrix(.84245 0 0 .84245 -7.0574 97.403)">
+                        <rect height="799.99" width="799.99" stroke="#000" y="202.37" x="50.007" stroke-width="2.0146" fill="#f4f3ff"/>
+                        <g fill="#fff5e0">
+                            <path id="path3990" d="m850 402.36-200-200h-185l0.00002 250 134 135 251-0.27035z" stroke="#000" stroke-width="2.0002" fill="#fff5e0"/>
+                            <use xlink:href="#path3990" transform="matrix(0 1 -1 0 1052.4 152.36)" height="900" width="1200" y="0" x="0"/>
+                            <use xlink:href="#path3990" transform="matrix(-1 0 0 -1 900 1204.7)" height="900" width="1200" y="0" x="0"/>
+                            <use xlink:href="#path3990" transform="matrix(0 -1 1 0 -152.36 1052.4)" height="900" width="1200" y="0" x="0"/>
+                        </g>
+                        <g stroke="#000" stroke-width="2" fill="#c9c9c9">
+                            <path d="m435 752.36v150h30v-150z"/>
+                            <path d="m301 587.36h-150v30h150z"/>
+                            <path d="m465 452.36v-150h-30v150z"/>
+                            <path d="m599 617.36h150v-30h-150z"/>
+                        </g>
+                        <g fill="#29af69">
+                            <rect transform="rotate(45)" height="35.355" width="35.355" y="602.66" x="726.25"/>
+                            <rect transform="rotate(45)" height="35.355" width="35.355" y="90.715" x="1238.2"/>
+                            <rect transform="matrix(.70711 -.70711 -.70711 -.70711 0 0)" height="35.355" width="35.355" y="-249.05" x="-125.46"/>
+                            <rect transform="matrix(.70711 -.70711 -.70711 -.70711 0 0)" height="35.355" width="35.355" y="-761" x="386.49"/>
+                        </g>
+                        <g font-size="29.734px" transform="matrix(1.0762 0 0 1.0762 -40.03 -18.511)" font-family="Sans" fill="#4d4d4d">
+                            <text style="word-spacing:0px;letter-spacing:0px" line-height="125%" y="256.8414" x="293.73587" xml:space="preserve"><tspan y="256.8414" x="293.73587">Zone 0</tspan></text>
+                            <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" y="918.60278" x="514.323" line-height="125%"><tspan y="918.60278" x="514.323">Zone 2</tspan></text>
+                            <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" y="256.64542" x="514.20685" line-height="125%"><tspan y="256.64542" x="514.20685">Zone 1</tspan></text>
+                            <text style="word-spacing:0px;letter-spacing:0px" line-height="125%" y="918.60278" x="293.93912" xml:space="preserve"><tspan y="918.60278" x="293.93912">Zone 3</tspan></text>
+                        </g>
+                    </g>
 
-            <tr>
-                <th colspan="5">Robot Information</th>
-            </tr>
+                    <text id="text3412" style="word-spacing:0px;letter-spacing:0px;text-anchor:middle;text-align:center" font-weight="bold" font-size="28px" line-height="125%" y="462.36215" x="190" font-family="Eurostile" xml:space="preserve" fill="#000000"><tspan y="462.36215" x="190"># Flags: _______</tspan></text>
+                    <text id="text3416" style="word-spacing:0px;letter-spacing:0px;text-anchor:end;text-align:end" font-weight="bold" font-size="20px" line-height="125%" y="532.36212" x="224.43359" font-family="Eurostile" xml:space="preserve" fill="#000000"><tspan y="532.36212" x="224.43359">Present: ▢</tspan><tspan y="557.42224" x="224.43359">Disqualified: ▢</tspan></text>
+                    <text id="text3523" style="word-spacing:0px;letter-spacing:0px" font-weight="800" xml:space="preserve" font-size="28px" line-height="125%" y="478.36215" x="128.51953" font-family="&apos;Rockwell Extra Bold&apos;" fill="#000000"><tspan y="478.36215" x="128.51953"/></text>
 
-            <tr>
-                <th>Team (TLA)</th>
-                {% for corner in corners %}
-                    <td>
-                        {% if match['teams'][corner] is not none %}
-                            {{ match['teams'][corner] }}
-                            <input type="hidden" name="team_tla_{{ corner }}"
-                                   value="{{ match['teams'][corner] }}" />
-                        {% else %}
-                            <em>Corner Empty</em>
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
+                    <text id="text3412-5" style="word-spacing:0px;letter-spacing:0px;text-anchor:middle;text-align:center" font-weight="bold" font-size="28px" line-height="125%" y="382.36215" x="210" font-family="Eurostile" xml:space="preserve" fill="#000000"><tspan y="382.36215" x="210">TLA: _______</tspan></text>
+                    <use id="use3564" xlink:href="#text3412" transform="translate(350)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use id="use3566" xlink:href="#text3416" transform="translate(430 1.3369e-7)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#text3523" transform="translate(403.48 -13)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use id="use3570" xlink:href="#text3412-5" transform="translate(290 -7)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#text3412" transform="translate(10,320)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#text3416" transform="translate(90,300)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#text3412-5" transform="translate(-60,315)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#use3564" transform="translate(-10 310)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#use3566" transform="translate(-90,300)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <use xlink:href="#use3570" transform="translate(80 322)" height="1052.3622" width="744.09448" y="0" x="0"/>
+                    <text style="word-spacing:0px;letter-spacing:0px;text-anchor:middle;text-align:center" font-weight="bold" font-size="24px" line-height="125%" y="581.02997" x="371.94763" font-family="Eurostile" xml:space="preserve" fill="#000000"><tspan y="581.02997" x="371.94763">Unclaimed Flags:</tspan><tspan y="611.02997" x="371.94763"/><tspan y="641.02997" x="371.94763">____________</tspan></text>
 
-            <tr>
-                <th>Was the robot disqualified?</th>
-                {% for corner in corners %}
-                    <td>
-                        {% if match['teams'][corner] is not none %}
-                            <input type="checkbox" name="disqualified_{{ corner }}"
-                                   value="on" {{ 'checked' if request.form.get('disqualified_{}'.format(corner), False) else '' }} />
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
+                    <!-- TLA inputs -->
+                    <foreignObject x="196" y="362" width="100" height="30">
+                        <input type="text" name="team_tla_0" value="{{ match['teams'][0] }}" />
+                    </foreignObject>
+                    <foreignObject x="486" y="355" width="100" height="30">
+                        <input type="text" name="team_tla_1" value="{{ match['teams'][1] }}" />
+                    </foreignObject>
+                    <foreignObject x="566" y="678" width="100" height="30">
+                        <input type="text" name="team_tla_2" value="{{ match['teams'][2] }}" />
+                    </foreignObject>
+                    <foreignObject x="136" y="678" width="100" height="30">
+                        <input type="text" name="team_tla_3" value="{{ match['teams'][3] }}" />
+                    </foreignObject>
 
-            <tr>
-                <th>Was the robot absent from this match?</th>
-                {% for corner in corners %}
-                    <td>
-                        {% if match["teams"][corner] is not none %}
-                            <input type="checkbox" name="absent_{{ corner }}" value="on"
-                                   {{ 'checked' if request.form.get('absent_{}'.format(corner), False) else '' }} />
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
+                    <!-- Flag inputs -->
+                    <foreignObject x="191" y="442" width="100" height="30">
+                        <input type="number" name="flags_0" value="{{ request.form.get('flags_0', 0) }}" required min="0" max="5" />
+                    </foreignObject>
+                    <foreignObject x="541" y="442" width="100" height="30">
+                        <input type="number" name="flags_1" value="{{ request.form.get('flags_1', 0) }}" required min="0" max="5" />
+                    </foreignObject>
+                    <foreignObject x="532" y="752" width="100" height="30">
+                        <input type="number" name="flags_2" value="{{ request.form.get('flags_2', 0) }}" required min="0" max="5" />
+                    </foreignObject>
+                    <foreignObject x="201" y="764" width="100" height="30">
+                        <input type="number" name="flags_3" value="{{ request.form.get('flags_3', 0) }}" required min="0" max="5" />
+                    </foreignObject>
+                    <foreignObject x="295" y="622" width="150" height="30">
+                        <input type="number" name="flags_left" value="{{ request.form.get('flags_left', 0) }}" required min="0" max="5" />
+                    </foreignObject>
 
-            <tr>
-                <th>Number of flags captured?</th>
-                {% for corner in corners %}
-                    <td>
-                        {% if match["teams"][corner] is not none %}
-                            <input type="number" name="flags_{{ corner }}"
-                                value="{{ request.form.get('flags_{}'.format(corner), 0) }}"
-                                required min="0" max="5" />
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
-        </table>
+                    <!-- Present -->
+                    <foreignObject x="197" y="517" width="30" height="30">
+                        <input type="checkbox" name="present_0" value="on" {{ 'checked' if request.form.get('present_0', False) else '' }} />
+                    </foreignObject>
+                    <foreignObject x="627" y="517" width="30" height="30">
+                        <input type="checkbox" name="present_1" value="on" {{ 'checked' if request.form.get('present_1', False) else '' }} />
+                    </foreignObject>
+                    <foreignObject x="537" y="817" width="30" height="30">
+                        <input type="checkbox" name="present_2" value="on" {{ 'checked' if request.form.get('present_2', False) else '' }} />
+                    </foreignObject>
+                    <foreignObject x="287" y="817" width="30" height="30">
+                        <input type="checkbox" name="present_3" value="on" {{ 'checked' if request.form.get('present_3', False) else '' }} />
+                    </foreignObject>
 
-        <br />
+                    <!-- Disqualified -->
+                    <foreignObject x="197" y="542" width="30" height="30">
+                        <input type="checkbox" name="disqualified_0" value="on" {{ 'checked' if request.form.get('disqualified_0', False) else '' }} />
+                    </foreignObject>
+                    <foreignObject x="627" y="542" width="30" height="30">
+                        <input type="checkbox" name="disqualified_1" value="on" {{ 'checked' if request.form.get('disqualified_1', False) else '' }} />
+                    </foreignObject>
+                    <foreignObject x="537" y="842" width="30" height="30">
+                        <input type="checkbox" name="disqualified_2" value="on" {{ 'checked' if request.form.get('disqualified_2', False) else '' }} />
+                    </foreignObject>
+                    <foreignObject x="287" y="842" width="30" height="30">
+                        <input type="checkbox" name="disqualified_3" value="on" {{ 'checked' if request.form.get('disqualified_3', False) else '' }} />
+                    </foreignObject>
+                </g>
+            </svg>
 
-        <input type="submit" value="Enter Scores" />
-
-    </form>
+            <br />
+            <input type="submit" value="Enter Scores" />
+        </form>
+    </div>
 {% endblock %}
