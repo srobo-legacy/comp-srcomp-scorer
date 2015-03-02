@@ -177,9 +177,9 @@ def update(arena, num):
     elif flask.request.method == 'POST':
         try:
             score = form_to_score(match, flask.request.form)
-        except ValueError:
+        except ValueError as e:
             return flask.render_template('update.html',
-                                         error='Invalid input.',
+                                         error=str(e),
                                          **template_settings)
 
         try:
