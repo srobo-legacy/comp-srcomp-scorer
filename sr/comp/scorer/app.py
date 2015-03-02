@@ -52,11 +52,8 @@ def group_list_dict(matches, keys):
 
 
 def is_match_done(match):
-    try:
-        g.compstate.load_score(match)
-        return True
-    except IOError:
-        return False
+    path = g.compstate.get_score_path(match)
+    return os.path.exists(path)
 app.jinja_env.globals.update(is_match_done=is_match_done)
 
 
