@@ -17,7 +17,8 @@
 
 .dialogue > div {
     border: 2px solid black;
-    border-radius: 2px;
+    border-radius: 4px;
+    box-shadow: 0 0 50px rgb(20, 20, 20);
     padding: 1em;
     background: white;
 }
