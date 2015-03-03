@@ -63,63 +63,63 @@
 
                     <!-- Zone 0 -->
                     <foreignObject x="204" y="361" width="100" height="30">
-                        <input type="text" name="tla_0" value="{{ request.form.get('tla_0', match['teams'][0]) | empty_if_none }}" />
+                        <input type="text" name="tla_0" value="{{ request.form.get('tla_0') | empty_if_none }}" />
                     </foreignObject>
                     <foreignObject x="198" y="441" width="100" height="30">
-                        <input type="number" name="flags_0" value="{{ request.form.get('flags_0', 0) }}" required min="0" max="5" />
+                        <input type="number" name="flags_0" value="{{ request.form.get('flags_0') | empty_if_none }}" min="0" max="5" />
                     </foreignObject>
                     <foreignObject x="204" y="515" width="24" height="24">
-                        <input type="checkbox" name="present_0" value="on" {{ 'checked' if request.form.get('present_0', False) else '' }} />
+                        <input type="checkbox" name="present_0" value="on" {{ 'checked' if request.form.get('present_0') else '' }} />
                     </foreignObject>
                     <foreignObject x="204" y="540" width="24" height="24">
-                        <input type="checkbox" name="disqualified_0" value="on" {{ 'checked' if request.form.get('disqualified_0', False) else '' }} />
+                        <input type="checkbox" name="disqualified_0" value="on" {{ 'checked' if request.form.get('disqualified_0') else '' }} />
                     </foreignObject>
 
                     <!-- Zone 1 -->
                     <foreignObject x="494" y="354" width="100" height="30">
-                        <input type="text" name="tla_1" value="{{ request.form.get('tla_1', match['teams'][1]) | empty_if_none }}" />
+                        <input type="text" name="tla_1" value="{{ request.form.get('tla_1') | empty_if_none }}" />
                     </foreignObject>
                     <foreignObject x="548" y="441" width="100" height="30">
-                        <input type="number" name="flags_1" value="{{ request.form.get('flags_1', 0) }}" required min="0" max="5" />
+                        <input type="number" name="flags_1" value="{{ request.form.get('flags_1') | empty_if_none }}" min="0" max="5" />
                     </foreignObject>
                     <foreignObject x="634" y="515" width="24" height="24">
-                        <input type="checkbox" name="present_1" value="on" {{ 'checked' if request.form.get('present_1', False) else '' }} />
+                        <input type="checkbox" name="present_1" value="on" {{ 'checked' if request.form.get('present_1') else '' }} />
                     </foreignObject>
                     <foreignObject x="634" y="540" width="24" height="24">
-                        <input type="checkbox" name="disqualified_1" value="on" {{ 'checked' if request.form.get('disqualified_1', False) else '' }} />
+                        <input type="checkbox" name="disqualified_1" value="on" {{ 'checked' if request.form.get('disqualified_1') else '' }} />
                     </foreignObject>
 
                     <!-- Zone 2 -->
                     <foreignObject x="574" y="676" width="100" height="30">
-                        <input type="text" name="tla_2" value="{{ request.form.get('tla_2', match['teams'][2]) | empty_if_none }}" />
+                        <input type="text" name="tla_2" value="{{ request.form.get('tla_2') | empty_if_none }}" />
                     </foreignObject>
                     <foreignObject x="538" y="751" width="100" height="30">
-                        <input type="number" name="flags_2" value="{{ request.form.get('flags_2', 0) }}" required min="0" max="5" />
+                        <input type="number" name="flags_2" value="{{ request.form.get('flags_2') | empty_if_none }}" min="0" max="5" />
                     </foreignObject>
                     <foreignObject x="544" y="815" width="24" height="24">
-                        <input type="checkbox" name="present_2" value="on" {{ 'checked' if request.form.get('present_2', False) else '' }} />
+                        <input type="checkbox" name="present_2" value="on" {{ 'checked' if request.form.get('present_2') else '' }} />
                     </foreignObject>
                     <foreignObject x="544" y="840" width="24" height="24">
-                        <input type="checkbox" name="disqualified_2" value="on" {{ 'checked' if request.form.get('disqualified_2', False) else '' }} />
+                        <input type="checkbox" name="disqualified_2" value="on" {{ 'checked' if request.form.get('disqualified_2') else '' }} />
                     </foreignObject>
 
                     <!-- Zone 3 -->
                     <foreignObject x="144" y="676" width="100" height="30">
-                        <input type="text" name="tla_3" value="{{ request.form.get('tla_3', match['teams'][3]) | empty_if_none }}" />
+                        <input type="text" name="tla_3" value="{{ request.form.get('tla_3') | empty_if_none }}" />
                     </foreignObject>
                     <foreignObject x="208" y="762" width="100" height="30">
-                        <input type="number" name="flags_3" value="{{ request.form.get('flags_3', 0) }}" required min="0" max="5" />
+                        <input type="number" name="flags_3" value="{{ request.form.get('flags_3') | empty_if_none }}" min="0" max="5" />
                     </foreignObject>
                     <foreignObject x="294" y="815" width="24" height="24">
-                        <input type="checkbox" name="present_3" value="on" {{ 'checked' if request.form.get('present_3', False) else '' }} />
+                        <input type="checkbox" name="present_3" value="on" {{ 'checked' if request.form.get('present_3') else '' }} />
                     </foreignObject>
                     <foreignObject x="294" y="840" width="24" height="24">
-                        <input type="checkbox" name="disqualified_3" value="on" {{ 'checked' if request.form.get('disqualified_3', False) else '' }} />
+                        <input type="checkbox" name="disqualified_3" value="on" {{ 'checked' if request.form.get('disqualified_3') else '' }} />
                     </foreignObject>
 
                     <!-- Unclaimed Flags -->
                     <foreignObject x="295" y="622" width="150" height="30">
-                        <input type="number" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags', 0) }}" required min="0" max="5" />
+                        <input type="number" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags') | empty_if_none }}" required min="0" max="5" />
                     </foreignObject>
                 </g>
             </svg>

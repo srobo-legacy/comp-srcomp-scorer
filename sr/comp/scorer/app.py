@@ -102,9 +102,26 @@ def score_to_form(score):
     for tla, info in score['teams'].items():
         i = info['zone']
         form['tla_{}'.format(i)] = tla
-        form['disqualified_{}'.format(i)] = info.get('disqualified', False)
-        form['present_{}'.format(i)] = info.get('present', True)
-        form['flags_{}'.format(i)] = info.get('flags', 0)
+        form['disqualified_{}'.format(i)] = info['disqualified']
+        form['present_{}'.format(i)] = info['present']
+        form['flags_{}'.format(i)] = info['flags']
+
+    form['unclaimed_flags'] = calculate_unclaimed_flags(score)
+
+    return form
+
+
+def match_to_form(match):
+    form = {}
+
+    for i, tla in enumerate(match.teams):
+        if tla:
+            form['tla_{}'.format(i)] = tla
+            form['disqualified_{}'.format(i)] = False
+            form['present_{}'.format(i)] = False
+            form['flags_{}'.format(i)] = 0
+
+    form['unclaimed_flags'] = 5
 
     return form
 
@@ -179,11 +196,9 @@ def update(arena, num):
         try:
             score = compstate.load_score(match)
         except IOError:
-            pass
+            flask.request.form = match_to_form(match)
         else:
             flask.request.form = score_to_form(score)
-            flask.request.form['unclaimed_flags'] = \
-                calculate_unclaimed_flags(score)
     elif flask.request.method == 'POST':
         try:
             score = form_to_score(match, flask.request.form)
