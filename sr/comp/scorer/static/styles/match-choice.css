@@ -13,3 +13,8 @@ table.match-choice td a:hover {
     background: rgb(210, 210, 210);
     text-decoration: none;
 }
+
+table.match-choice td .done {
+    color: green;
+    font-weight: bold;
+}

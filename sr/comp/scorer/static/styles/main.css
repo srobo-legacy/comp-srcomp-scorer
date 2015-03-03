@@ -77,12 +77,3 @@ th {
     text-align: left;
     font-size: 1.2em;
 }
-
-.error {
-    color: red;
-}
-
-.done {
-    color: green;
-    font-weight: bold;
-}
