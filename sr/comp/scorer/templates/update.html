@@ -4,6 +4,16 @@
     <link href="{{ url_for('static', filename='styles/score-sheet.css') }}" rel="stylesheet" />
 {% endblock %}
 
+{% macro select_tla(corner) %}
+    {% set current = request.form.get('tla_{}'.format(corner)) %}
+    <select name="tla_{{ corner }}">
+        <option value=""></option>
+        {% for tla, team in teams | dictsort %}
+            <option value="{{ tla }}" {{ 'selected' if current == tla else '' }}>{{ tla }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
 {% block main %}
     <div class="score-sheet">
         <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
@@ -57,7 +67,7 @@
 
                     <!-- Zone 0 -->
                     <foreignObject x="204" y="361" width="100" height="30">
-                        <input type="text" name="tla_0" value="{{ request.form.get('tla_0') | empty_if_none }}" />
+                        {{ select_tla(0) }}
                     </foreignObject>
                     <foreignObject x="198" y="441" width="100" height="30">
                         <input type="number" name="flags_0" value="{{ request.form.get('flags_0') | empty_if_none }}" min="0" max="5" />
@@ -71,7 +81,7 @@
 
                     <!-- Zone 1 -->
                     <foreignObject x="494" y="354" width="100" height="30">
-                        <input type="text" name="tla_1" value="{{ request.form.get('tla_1') | empty_if_none }}" />
+                        {{ select_tla(1) }}
                     </foreignObject>
                     <foreignObject x="548" y="441" width="100" height="30">
                         <input type="number" name="flags_1" value="{{ request.form.get('flags_1') | empty_if_none }}" min="0" max="5" />
@@ -85,7 +95,7 @@
 
                     <!-- Zone 2 -->
                     <foreignObject x="574" y="676" width="100" height="30">
-                        <input type="text" name="tla_2" value="{{ request.form.get('tla_2') | empty_if_none }}" />
+                        {{ select_tla(2) }}
                     </foreignObject>
                     <foreignObject x="538" y="751" width="100" height="30">
                         <input type="number" name="flags_2" value="{{ request.form.get('flags_2') | empty_if_none }}" min="0" max="5" />
@@ -99,7 +109,7 @@
 
                     <!-- Zone 3 -->
                     <foreignObject x="144" y="676" width="100" height="30">
-                        <input type="text" name="tla_3" value="{{ request.form.get('tla_3') | empty_if_none }}" />
+                        {{ select_tla(3) }}
                     </foreignObject>
                     <foreignObject x="208" y="762" width="100" height="30">
                         <input type="number" name="flags_3" value="{{ request.form.get('flags_3') | empty_if_none }}" min="0" max="5" />
