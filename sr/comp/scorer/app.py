@@ -2,7 +2,9 @@ import collections
 from datetime import datetime
 import dateutil.tz
 import itertools
+import io
 import os
+import sys
 
 import flask
 
@@ -140,9 +142,13 @@ def update_and_validate(compstate, match, score):
         compstate.reset_hard()
         raise RuntimeError(e)
     else:
-        i = validate(comp)
-        if i > 0:
-            raise RuntimeError('{} errors occured.'.format(i))
+        # TODO Update SRComp to return the error messages.
+        old_stderr = sys.stderr
+        sys.stderr = new_stderr = io.StringIO()
+        num_errors = validate(comp)
+        sys.stderr = old_stderr
+        if num_errors:
+            raise RuntimeError(new_stderr.getvalue())
 
 
 def commit_and_push(compstate, match):
