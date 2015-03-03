@@ -8,12 +8,6 @@
     <div class="score-sheet">
         <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
 
-        {% if error %}
-            <h2 class="error">{{ error }}</h2>
-        {% elif done %}
-            <h2 class="done">Scores updated successfully.</h2>
-        {% endif %}
-
         <form method="POST">
             <svg xmlns="http://www.w3.org/2000/svg" height="675.65" width="675.65" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g transform="translate(-34.223 -267.04)">
@@ -127,4 +121,43 @@
             <input type="submit" value="Enter Scores" />
         </form>
     </div>
+
+    {% if error %}
+        <aside class="dialogue fail">
+            <div>
+                <h1>Validation Error!</h1>
+                <pre>{{ error }}</pre>
+                <button data-action="hide">Correct Problems</button>
+            </div>
+        </aside>
+    {% elif done %}
+        <aside class="dialogue success">
+            <div>
+                <h1>Success!</h1>
+                <p>The scores have been updated successfully.</p>
+                <button data-action="back">Select Another Match</button>
+                <button data-action="hide">Amend Scores</button>
+            </div>
+        </aside>
+    {% endif %}
+
+    {% if error or done %}
+        <script>
+            var dialogue = document.querySelector('aside.dialogue');
+
+            var hideBtns = document.querySelectorAll('[data-action=hide]');
+            for (var i = 0; i < hideBtns.length; i++) {
+                hideBtns[i].addEventListener('click', function() {
+                    dialogue.hidden = true;
+                });
+            }
+
+            var backBtns = document.querySelectorAll('[data-action=back]');
+            for (var i = 0; i < backBtns.length; i++) {
+                backBtns[i].addEventListener('click', function() {
+                    window.location = '{{ url_for('.index') }}';
+                });
+            }
+        </script>
+    {% endif %}
 {% endblock %}
