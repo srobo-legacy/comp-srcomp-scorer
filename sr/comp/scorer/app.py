@@ -27,7 +27,7 @@ app.jinja_env.globals.update(grouper=grouper)
 
 
 def empty_if_none(string):
-    return string if string else ''
+    return string if string is not None else ''
 app.jinja_env.filters.update(empty_if_none=empty_if_none)
 
 
