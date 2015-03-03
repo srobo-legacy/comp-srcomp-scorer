@@ -128,7 +128,7 @@ def match_to_form(match):
     return form
 
 
-def update_and_validate(compstate, match, score):
+def update_and_validate(compstate, match, score, force):
     compstate.save_score(match, score)
 
     path = compstate.get_score_path(match)
@@ -142,13 +142,14 @@ def update_and_validate(compstate, match, score):
         compstate.reset_hard()
         raise RuntimeError(e)
     else:
-        # TODO Update SRComp to return the error messages.
-        old_stderr = sys.stderr
-        sys.stderr = new_stderr = io.StringIO()
-        num_errors = validate(comp)
-        sys.stderr = old_stderr
-        if num_errors:
-            raise RuntimeError(new_stderr.getvalue())
+        if not force:
+            # TODO Update SRComp to return the error messages.
+            old_stderr = sys.stderr
+            sys.stderr = new_stderr = io.StringIO()
+            num_errors = validate(comp)
+            sys.stderr = old_stderr
+            if num_errors:
+                raise RuntimeError(new_stderr.getvalue())
 
 
 def commit_and_push(compstate, match):
@@ -214,8 +215,9 @@ def update(arena, num):
                                          **template_settings)
 
         try:
+            force = bool(flask.request.form.get('force'))
             compstate.reset_and_fast_forward()
-            update_and_validate(compstate, match, score)
+            update_and_validate(compstate, match, score, force)
             commit_and_push(compstate, match)
         except RuntimeError as e:
             return flask.render_template('update.html',

@@ -118,6 +118,7 @@
                 </g>
             </svg>
 
+            <input type="hidden" name="force" />
             <input type="submit" value="Enter Scores" />
         </form>
     </div>
@@ -127,7 +128,8 @@
             <div>
                 <h1>Validation Error!</h1>
                 <pre>{{ error }}</pre>
-                <button data-action="hide">Correct Problems</button>
+                <button data-action="hide">Correct problems</button>
+                <button data-action="force">Save anyway</button>
             </div>
         </aside>
     {% elif done %}
@@ -135,8 +137,8 @@
             <div>
                 <h1>Success!</h1>
                 <p>The scores have been updated successfully.</p>
-                <button data-action="back">Select Another Match</button>
-                <button data-action="hide">Amend Scores</button>
+                <button data-action="back">Select another Match</button>
+                <button data-action="hide">Amend scores</button>
             </div>
         </aside>
     {% endif %}
@@ -156,6 +158,14 @@
             for (var i = 0; i < backBtns.length; i++) {
                 backBtns[i].addEventListener('click', function() {
                     window.location = '{{ url_for('.index') }}';
+                });
+            }
+
+            var forceBtns = document.querySelectorAll('[data-action=force]');
+            for (var i = 0; i < forceBtns.length; i++) {
+                forceBtns[i].addEventListener('click', function() {
+                    document.querySelector('input[name=force]').value = 'on';
+                    document.querySelector('form').submit();
                 });
             }
         </script>
