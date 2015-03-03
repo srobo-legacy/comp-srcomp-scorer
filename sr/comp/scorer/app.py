@@ -222,9 +222,9 @@ def update(arena, num):
                                          error=str(e),
                                          **template_settings)
         else:
-            url = flask.url_for('update', arena=arena, num=num) + '?done=true'
+            url = flask.url_for('update', arena=arena, num=num) + '?done'
             return flask.redirect(url)
 
     return flask.render_template('update.html',
-                                 done=flask.request.args.get('done', False),
+                                 done='done' in flask.request.args,
                                  **template_settings)
