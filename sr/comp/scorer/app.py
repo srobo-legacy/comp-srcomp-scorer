@@ -26,6 +26,11 @@ def grouper(iterable, n, fillvalue=None):
 app.jinja_env.globals.update(grouper=grouper)
 
 
+def empty_if_none(string):
+    return string if string else ''
+app.jinja_env.filters.update(empty_if_none=empty_if_none)
+
+
 def parse_hex_colour(string):
     string = string.strip('#')
     return int(string[:2], 16), int(string[2:4], 16), int(string[4:], 16)
