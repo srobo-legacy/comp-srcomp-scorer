@@ -162,7 +162,7 @@ def calculate_unclaimed_flags(score_sheet):
     unclaimed_flags = 5
     for tla, scores in score_sheet['teams'].items():
         unclaimed_flags -= scores['flags']
-    assert unclaimed_flags > 0
+    assert unclaimed_flags >= 0
     return unclaimed_flags
 
 
