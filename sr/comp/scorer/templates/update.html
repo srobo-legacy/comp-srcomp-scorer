@@ -64,63 +64,53 @@
         <h1>{{ match['type'].value | title }} scores for match {{ match['num'] }} in arena {{ arenas[match['arena']].display_name }}</h1>
 
         <form method="POST">
-            <svg xmlns="http://www.w3.org/2000/svg" height="675.65" width="675.65" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <g transform="translate(-34.223 -267.04)">
-                    <g transform="matrix(.84245 0 0 .84245 -7.0574 97.403)">
-                        <rect height="799.99" width="799.99" stroke="#000" y="202.37" x="50.007" stroke-width="2.0146" fill="#f4f3ff"/>
-                        <g fill="#fff5e0">
-                            <path id="path3990" d="m850 402.36-200-200h-185l0.00002 250 134 135 251-0.27035z" stroke="#000" stroke-width="2.0002" fill="#fff5e0"/>
-                            <use xlink:href="#path3990" transform="matrix(0 1 -1 0 1052.4 152.36)" height="900" width="1200" y="0" x="0"/>
-                            <use xlink:href="#path3990" transform="matrix(-1 0 0 -1 900 1204.7)" height="900" width="1200" y="0" x="0"/>
-                            <use xlink:href="#path3990" transform="matrix(0 -1 1 0 -152.36 1052.4)" height="900" width="1200" y="0" x="0"/>
-                        </g>
-                        <g stroke="#000" stroke-width="2" fill="#c9c9c9">
-                            <path d="m435 752.36v150h30v-150z"/>
-                            <path d="m301 587.36h-150v30h150z"/>
-                            <path d="m465 452.36v-150h-30v150z"/>
-                            <path d="m599 617.36h150v-30h-150z"/>
-                        </g>
-                        <g fill="#29af69">
-                            <rect transform="rotate(45)" height="35.355" width="35.355" y="602.66" x="726.25"/>
-                            <rect transform="rotate(45)" height="35.355" width="35.355" y="90.715" x="1238.2"/>
-                            <rect transform="matrix(.70711 -.70711 -.70711 -.70711 0 0)" height="35.355" width="35.355" y="-249.05" x="-125.46"/>
-                            <rect transform="matrix(.70711 -.70711 -.70711 -.70711 0 0)" height="35.355" width="35.355" y="-761" x="386.49"/>
-                        </g>
-                        <g font-size="29.734px" transform="matrix(1.0762 0 0 1.0762 -40.03 -18.511)" fill="#4d4d4d">
-                            <text line-height="125%" y="256.8414" x="293.73587" xml:space="preserve"><tspan y="256.8414" x="293.73587">Zone 0</tspan></text>
-                            <text xml:space="preserve" y="918.60278" x="514.323" line-height="125%"><tspan y="918.60278" x="514.323">Zone 2</tspan></text>
-                            <text xml:space="preserve" y="256.64542" x="514.20685" line-height="125%"><tspan y="256.64542" x="514.20685">Zone 1</tspan></text>
-                            <text line-height="125%" y="918.60278" x="293.93912" xml:space="preserve"><tspan y="918.60278" x="293.93912">Zone 3</tspan></text>
-                        </g>
-                    </g>
-
-                    <!-- Zone 0 -->
-                    {{ input_tla(154, 361, 0) }}
-                    {{ input_flags(98, 441, 0) }}
-                    {{ input_present(104, 515, 0) }}
-                    {{ input_disqualified(54, 545, 0) }}
-
-                    <!-- Zone 1 -->
-                    {{ input_tla(444, 354, 1) }}
-                    {{ input_flags(448, 441, 1) }}
-                    {{ input_present(534, 515, 1) }}
-                    {{ input_disqualified(484, 545, 1) }}
-
-                    <!-- Zone 2 -->
-                    {{ input_tla(524, 676, 2) }}
-                    {{ input_flags(438, 751, 2) }}
-                    {{ input_present(444, 815, 2) }}
-                    {{ input_disqualified(394, 845, 2) }}
-
-                    <!-- Zone 3 -->
-                    {{ input_tla(94, 676, 3) }}
-                    {{ input_flags(108, 762, 3) }}
-                    {{ input_present(194, 815, 3) }}
-                    {{ input_disqualified(144, 845, 3) }}
-
-                    <!-- Unclaimed Flags -->
-                    {{ input_unclaimed_flags(297, 565) }}
+            <svg xmlns="http://www.w3.org/2000/svg" height="600" width="600" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <rect height="600" width="600" stroke="#000" y="0" x="0" stroke-width="2" fill="#f4f3ff"/>
+                <g fill="#fff5e0" transform="scale(0.75 0.75)" stroke="#000" stroke-width="2">
+                    <path id="path3990" d="m800 200-200-200h-185l0 250 135 135 250-0z" />
+                    <use xlink:href="#path3990" transform="matrix(0 1 -1 0 800 0)" />
+                    <use xlink:href="#path3990" transform="matrix(-1 0 0 -1 800 800)" />
+                    <use xlink:href="#path3990" transform="matrix(0 -1 1 0 0 800)" />
                 </g>
+                <g stroke="#000" stroke-width="2" fill="#c9c9c9" transform="scale(0.75 0.75)">
+                    <path d="m385 600v150h30v-150z"/>
+                    <path d="m200 385h-150v30h150z"/>
+                    <path d="m415 200v-150h-30v150z"/>
+                    <path d="m600 415h150v-30h-150z"/>
+                </g>
+                <g font-size="2.5em" fill="#4d4d4d" transform="scale(0.75 0.75)">
+                    <text><tspan y="50" x="225">Zone 0</tspan></text>
+                    <text><tspan y="50" x="455">Zone 1</tspan></text>
+                    <text><tspan y="775" x="455">Zone 2</tspan></text>
+                    <text><tspan y="775" x="225">Zone 3</tspan></text>
+                </g>
+
+                <!-- Zone 0 -->
+                {{ input_tla(110, 70, 0) }}
+                {{ input_flags(70, 120, 0) }}
+                {{ input_present(80, 170, 0) }}
+                {{ input_disqualified(35, 220, 0) }}
+
+                <!-- Zone 1 -->
+                {{ input_tla(345, 70, 1) }}
+                {{ input_flags(355, 120, 1) }}
+                {{ input_present(405, 170, 1) }}
+                {{ input_disqualified(410, 220, 1) }}
+
+                <!-- Zone 2 -->
+                {{ input_tla(425, 350, 2) }}
+                {{ input_flags(370, 400, 2) }}
+                {{ input_present(385, 450, 2) }}
+                {{ input_disqualified(335, 500, 2) }}
+
+                <!-- Zone 3 -->
+                {{ input_tla(30, 350, 3) }}
+                {{ input_flags(55, 400, 3) }}
+                {{ input_present(100, 450, 3) }}
+                {{ input_disqualified(110, 500, 3) }}
+
+                <!-- Unclaimed Flags -->
+                {{ input_unclaimed_flags(225, 265) }}
             </svg>
 
             <input type="hidden" name="force" />
