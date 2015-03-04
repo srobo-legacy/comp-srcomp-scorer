@@ -6,10 +6,11 @@
 
 {% macro input_tla(x, y, corner) %}
     {% set current = request.form.get('tla_{}'.format(corner)) %}
-    <foreignObject x="{{ x }}" y="{{ y }}" width="42" height="30">
+    <rect width="155" height="40" x="{{ x - 5 }}" y="{{ y - 5}}" fill="rgba(0, 0, 0, 0.05)"/>
+    <foreignObject x="{{ x }}" y="{{ y }}" width="40" height="30">
         <label for="tla_{{ corner }}">TLA</label>
     </foreignObject>
-    <foreignObject x="{{ x + 50 }}" y="{{ y }}" width="100" height="30">
+    <foreignObject x="{{ x + 45 }}" y="{{ y }}" width="100" height="30">
         <select id="tla_{{ corner }}" name="tla_{{ corner }}">
             <option value=""></option>
             {% for tla, team in teams | dictsort %}
@@ -20,28 +21,31 @@
 {% endmacro %}
 
 {% macro input_flags(x, y, corner) %}
-    <foreignObject x="{{ x }}" y="{{ y }}" width="72" height="30">
+    <rect width="185" height="40" x="{{ x - 5 }}" y="{{ y - 5}}" fill="rgba(0, 0, 0, 0.05)"/>
+    <foreignObject x="{{ x }}" y="{{ y }}" width="70" height="30">
         <label for="flags_{{ corner }}"># Flags</label>
     </foreignObject>
-    <foreignObject x="{{ x + 80 }}" y="{{ y }}" width="100" height="30">
+    <foreignObject x="{{ x + 75 }}" y="{{ y }}" width="100" height="30">
         <input type="number" id="flags_{{ corner }}" name="flags_{{ corner }}" value="{{ request.form.get('flags_{}'.format(corner)) | empty_if_none }}" min="0" max="5" />
     </foreignObject>
 {% endmacro %}
 
 {% macro input_present(x, y, corner) %}
-    <foreignObject x="{{ x }}" y="{{ y }}" width="92" height="30">
+    <rect width="125" height="40" x="{{ x - 5 }}" y="{{ y - 5}}" fill="rgba(0, 0, 0, 0.05)"/>
+    <foreignObject x="{{ x }}" y="{{ y }}" width="80" height="30">
         <label for="present_{{ corner }}">Present</label>
     </foreignObject>
-    <foreignObject x="{{ x + 100 }}" y="{{ y }}" width="30" height="30">
+    <foreignObject x="{{ x + 85 }}" y="{{ y }}" width="30" height="30">
         <input type="checkbox" id="present_{{ corner }}" name="present_{{ corner }}" value="on" {{ 'checked' if request.form.get('present_{}'.format(corner)) else '' }} />
     </foreignObject>
 {% endmacro %}
 
 {% macro input_disqualified(x, y, corner) %}
-    <foreignObject x="{{ x }}" y="{{ y }}" width="142" height="30">
+    <rect width="165" height="40" x="{{ x - 5 }}" y="{{ y - 5}}" fill="rgba(0, 0, 0, 0.05)"/>
+    <foreignObject x="{{ x }}" y="{{ y }}" width="120" height="30">
         <label for="disqualified_{{ corner }}">Disqualified</label>
     </foreignObject>
-    <foreignObject x="{{ x + 150 }}" y="{{ y }}" width="30" height="30">
+    <foreignObject x="{{ x + 125 }}" y="{{ y }}" width="30" height="30">
         <input type="checkbox" id="disqualified_{{ corner }}" name="disqualified_{{ corner }}" value="on" {{ 'checked' if request.form.get('disqualified_{}'.format(corner)) else '' }} />
     </foreignObject>
 {% endmacro %}
