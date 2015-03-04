@@ -4,14 +4,55 @@
     <link href="{{ url_for('static', filename='styles/score-sheet.css') }}" rel="stylesheet" />
 {% endblock %}
 
-{% macro select_tla(corner) %}
+{% macro input_tla(x, y, corner) %}
     {% set current = request.form.get('tla_{}'.format(corner)) %}
-    <select name="tla_{{ corner }}">
-        <option value=""></option>
-        {% for tla, team in teams | dictsort %}
-            <option value="{{ tla }}" {{ 'selected' if current == tla else '' }}>{{ tla }}</option>
-        {% endfor %}
-    </select>
+    <foreignObject x="{{ x }}" y="{{ y }}" width="42" height="30">
+        <label for="tla_{{ corner }}">TLA</label>
+    </foreignObject>
+    <foreignObject x="{{ x + 50 }}" y="{{ y }}" width="100" height="30">
+        <select id="tla_{{ corner }}" name="tla_{{ corner }}">
+            <option value=""></option>
+            {% for tla, team in teams | dictsort %}
+                <option value="{{ tla }}" {{ 'selected' if current == tla else '' }}>{{ tla }}</option>
+            {% endfor %}
+        </select>
+    </foreignObject>
+{% endmacro %}
+
+{% macro input_flags(x, y, corner) %}
+    <foreignObject x="{{ x }}" y="{{ y }}" width="72" height="30">
+        <label for="flags_{{ corner }}"># Flags</label>
+    </foreignObject>
+    <foreignObject x="{{ x + 80 }}" y="{{ y }}" width="100" height="30">
+        <input type="number" id="flags_{{ corner }}" name="flags_{{ corner }}" value="{{ request.form.get('flags_{}'.format(corner)) | empty_if_none }}" min="0" max="5" />
+    </foreignObject>
+{% endmacro %}
+
+{% macro input_present(x, y, corner) %}
+    <foreignObject x="{{ x }}" y="{{ y }}" width="92" height="30">
+        <label for="present_{{ corner }}">Present</label>
+    </foreignObject>
+    <foreignObject x="{{ x + 100 }}" y="{{ y }}" width="30" height="30">
+        <input type="checkbox" id="present_{{ corner }}" name="present_{{ corner }}" value="on" {{ 'checked' if request.form.get('present_{}'.format(corner)) else '' }} />
+    </foreignObject>
+{% endmacro %}
+
+{% macro input_disqualified(x, y, corner) %}
+    <foreignObject x="{{ x }}" y="{{ y }}" width="142" height="30">
+        <label for="disqualified_{{ corner }}">Disqualified</label>
+    </foreignObject>
+    <foreignObject x="{{ x + 150 }}" y="{{ y }}" width="30" height="30">
+        <input type="checkbox" id="disqualified_{{ corner }}" name="disqualified_{{ corner }}" value="on" {{ 'checked' if request.form.get('disqualified_{}'.format(corner)) else '' }} />
+    </foreignObject>
+{% endmacro %}
+
+{% macro input_unclaimed_flags(x, y) %}
+    <foreignObject x="{{ x }}" y="{{ y }}" width="150" height="30">
+        <label for="unclaimed_flags">Unclaimed Flags</label>
+    </foreignObject>
+    <foreignObject x="{{ x }}" y="{{ y + 40}}" width="150" height="30">
+        <input type="number" id="unclaimed_flags" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags') | empty_if_none }}" required min="0" max="5" />
+    </foreignObject>
 {% endmacro %}
 
 {% block main %}
@@ -49,82 +90,32 @@
                         </g>
                     </g>
 
-                    <text id="text3412" style="text-anchor:middle;text-align:center" font-weight="bold" font-size="1.2em" line-height="125%" y="462.36215" x="190" xml:space="preserve" fill="#000000"><tspan y="462.36215" x="190"># Flags: _______</tspan></text>
-                    <text id="text3416" style="text-anchor:end;text-align:end" font-weight="bold" font-size="1.2em" line-height="125%" y="532.36212" x="224.43359" xml:space="preserve" fill="#000000"><tspan y="532.36212" x="224.43359">Present: ▢</tspan><tspan y="557.42224" x="224.43359">Disqualified: ▢</tspan></text>
-                    <text id="text3412-5" style="text-anchor:middle;text-align:center" font-weight="bold" font-size="1.2em" line-height="125%" y="382.36215" x="210" xml:space="preserve" fill="#000000"><tspan y="382.36215" x="210">TLA: _______</tspan></text>
-
-                    <use id="use3564" xlink:href="#text3412" transform="translate(350)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use id="use3566" xlink:href="#text3416" transform="translate(430 1.3369e-7)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#text3523" transform="translate(403.48 -13)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use id="use3570" xlink:href="#text3412-5" transform="translate(290 -7)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#text3412" transform="translate(10,320)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#text3416" transform="translate(90,300)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#text3412-5" transform="translate(-60,315)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#use3564" transform="translate(-10 310)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#use3566" transform="translate(-90,300)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <use xlink:href="#use3570" transform="translate(80 322)" height="1052.3622" width="744.09448" y="0" x="0"/>
-                    <text style="text-anchor:middle;text-align:center" font-weight="bold" font-size="1.3em" y="581.02997" x="371.94763" xml:space="preserve"><tspan y="581.02997" x="371.94763">Unclaimed Flags:</tspan><tspan y="611.02997" x="371.94763"/><tspan y="641.02997" x="371.94763">____________</tspan></text>
-
                     <!-- Zone 0 -->
-                    <foreignObject x="204" y="361" width="100" height="30">
-                        {{ select_tla(0) }}
-                    </foreignObject>
-                    <foreignObject x="198" y="441" width="100" height="30">
-                        <input type="number" name="flags_0" value="{{ request.form.get('flags_0') | empty_if_none }}" min="0" max="5" />
-                    </foreignObject>
-                    <foreignObject x="204" y="515" width="24" height="24">
-                        <input type="checkbox" name="present_0" value="on" {{ 'checked' if request.form.get('present_0') else '' }} />
-                    </foreignObject>
-                    <foreignObject x="204" y="540" width="24" height="24">
-                        <input type="checkbox" name="disqualified_0" value="on" {{ 'checked' if request.form.get('disqualified_0') else '' }} />
-                    </foreignObject>
+                    {{ input_tla(154, 361, 0) }}
+                    {{ input_flags(98, 441, 0) }}
+                    {{ input_present(104, 515, 0) }}
+                    {{ input_disqualified(54, 545, 0) }}
 
                     <!-- Zone 1 -->
-                    <foreignObject x="494" y="354" width="100" height="30">
-                        {{ select_tla(1) }}
-                    </foreignObject>
-                    <foreignObject x="548" y="441" width="100" height="30">
-                        <input type="number" name="flags_1" value="{{ request.form.get('flags_1') | empty_if_none }}" min="0" max="5" />
-                    </foreignObject>
-                    <foreignObject x="634" y="515" width="24" height="24">
-                        <input type="checkbox" name="present_1" value="on" {{ 'checked' if request.form.get('present_1') else '' }} />
-                    </foreignObject>
-                    <foreignObject x="634" y="540" width="24" height="24">
-                        <input type="checkbox" name="disqualified_1" value="on" {{ 'checked' if request.form.get('disqualified_1') else '' }} />
-                    </foreignObject>
+                    {{ input_tla(444, 354, 1) }}
+                    {{ input_flags(448, 441, 1) }}
+                    {{ input_present(534, 515, 1) }}
+                    {{ input_disqualified(484, 545, 1) }}
 
                     <!-- Zone 2 -->
-                    <foreignObject x="574" y="676" width="100" height="30">
-                        {{ select_tla(2) }}
-                    </foreignObject>
-                    <foreignObject x="538" y="751" width="100" height="30">
-                        <input type="number" name="flags_2" value="{{ request.form.get('flags_2') | empty_if_none }}" min="0" max="5" />
-                    </foreignObject>
-                    <foreignObject x="544" y="815" width="24" height="24">
-                        <input type="checkbox" name="present_2" value="on" {{ 'checked' if request.form.get('present_2') else '' }} />
-                    </foreignObject>
-                    <foreignObject x="544" y="840" width="24" height="24">
-                        <input type="checkbox" name="disqualified_2" value="on" {{ 'checked' if request.form.get('disqualified_2') else '' }} />
-                    </foreignObject>
+                    {{ input_tla(524, 676, 2) }}
+                    {{ input_flags(438, 751, 2) }}
+                    {{ input_present(444, 815, 2) }}
+                    {{ input_disqualified(394, 845, 2) }}
 
                     <!-- Zone 3 -->
-                    <foreignObject x="144" y="676" width="100" height="30">
-                        {{ select_tla(3) }}
-                    </foreignObject>
-                    <foreignObject x="208" y="762" width="100" height="30">
-                        <input type="number" name="flags_3" value="{{ request.form.get('flags_3') | empty_if_none }}" min="0" max="5" />
-                    </foreignObject>
-                    <foreignObject x="294" y="815" width="24" height="24">
-                        <input type="checkbox" name="present_3" value="on" {{ 'checked' if request.form.get('present_3') else '' }} />
-                    </foreignObject>
-                    <foreignObject x="294" y="840" width="24" height="24">
-                        <input type="checkbox" name="disqualified_3" value="on" {{ 'checked' if request.form.get('disqualified_3') else '' }} />
-                    </foreignObject>
+                    {{ input_tla(94, 676, 3) }}
+                    {{ input_flags(108, 762, 3) }}
+                    {{ input_present(194, 815, 3) }}
+                    {{ input_disqualified(144, 845, 3) }}
 
                     <!-- Unclaimed Flags -->
-                    <foreignObject x="295" y="622" width="150" height="30">
-                        <input type="number" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags') | empty_if_none }}" required min="0" max="5" />
-                    </foreignObject>
+                    {{ input_unclaimed_flags(297, 565) }}
                 </g>
             </svg>
 
