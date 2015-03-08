@@ -58,7 +58,7 @@
 {% block main %}
     {% set r, g, b = parse_hex_colour(arenas[match['arena']].colour) %}
     <div class="score-sheet" style="background: rgba({{ r }}, {{ g }}, {{ b }}, 0.15)">
-        <h1>{{ match['type'].value | title }} scores for Match {{ match['num'] }} in Arena {{ arenas[match['arena']].display_name }}</h1>
+        <h1>{{ match['type'].value | title }} scores for {{ match['display_name'] }} in Arena {{ arenas[match['arena']].display_name }}</h1>
 
         <form method="POST">
             <svg xmlns="http://www.w3.org/2000/svg" height="600" width="600" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
