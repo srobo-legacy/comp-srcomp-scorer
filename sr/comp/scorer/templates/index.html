@@ -20,7 +20,7 @@
 
 {% macro arena_table(arena, matches, width=8) %}
     {% set r, g, b = parse_hex_colour(arena.colour) %}
-    <table class="match-choice" style="background: rgba({{ r }}, {{ b }}, {{ g }}, 0.05)">
+    <table class="match-choice" style="background: rgba({{ r }}, {{ g }}, {{ b }}, 0.05)">
         <tr>
             <th colspan="{{ width }}">Arena {{ arena.display_name }}</th>
         </tr>
