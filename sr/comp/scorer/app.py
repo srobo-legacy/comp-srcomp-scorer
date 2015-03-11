@@ -94,7 +94,10 @@ def form_to_score(match, form):
     return {
         'arena_id': match.arena,
         'match_number': match.num,
-        'teams': teams
+        'teams': teams,
+        'other': {
+            'unclaimed_flags': int(form.get('unclaimed_flags', 0))
+        }
     }
 
 
@@ -108,7 +111,7 @@ def score_to_form(score):
         form['present_{}'.format(i)] = info['present']
         form['flags_{}'.format(i)] = info['flags']
 
-    form['unclaimed_flags'] = calculate_unclaimed_flags(score)
+    form['unclaimed_flags'] = score['other']['unclaimed_flags']
 
     return form
 
@@ -157,14 +160,6 @@ def commit_and_push(compstate, match):
         .format(match.type.value, match.num, match.arena)
 
     compstate.commit_and_push(commit_msg)
-
-
-def calculate_unclaimed_flags(score_sheet):
-    unclaimed_flags = 5
-    for tla, scores in score_sheet['teams'].items():
-        unclaimed_flags -= scores['flags']
-    assert unclaimed_flags >= 0
-    return unclaimed_flags
 
 
 @app.before_request
