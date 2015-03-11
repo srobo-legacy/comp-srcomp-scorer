@@ -88,9 +88,6 @@ def form_to_score(match, form):
     for i in range(4):
         form_team_to_score(i, teams)
 
-    if detected_flags + int(form.get('unclaimed_flags', 0)) != 5:
-        raise ValueError("Total number of flags doesn't add up to five.")
-
     return {
         'arena_id': match.arena,
         'match_number': match.num,
