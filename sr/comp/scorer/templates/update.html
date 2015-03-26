@@ -46,21 +46,17 @@
     </foreignObject>
 {% endmacro %}
 
-{% macro input_unclaimed_flags(x, y) %}
-    <foreignObject x="{{ x }}" y="{{ y }}" width="150" height="30">
-        <label for="unclaimed_flags">Unclaimed Flags</label>
-    </foreignObject>
-    <foreignObject x="{{ x }}" y="{{ y + 40}}" width="150" height="30">
-        <input type="number" id="unclaimed_flags" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags') | empty_if_none }}" required min="0" max="5" />
-    </foreignObject>
-{% endmacro %}
-
 {% block main %}
     {% set r, g, b = parse_hex_colour(arenas[match['arena']].colour) %}
     <div class="score-sheet" style="background: rgba({{ r }}, {{ g }}, {{ b }}, 0.15)">
         <h1>{{ match['type'].value | title }} scores for {{ match['display_name'] }} in Arena {{ arenas[match['arena']].display_name }}</h1>
 
         <form method="POST">
+            <div class="field">
+                <label for="unclaimed_flags">Unclaimed Flags (Anywhere):</label>
+                <input type="number" id="unclaimed_flags" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags') | empty_if_none }}" required min="0" max="5" />
+            </div>
+
             <svg xmlns="http://www.w3.org/2000/svg" height="600" width="600" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <rect height="600" width="600" stroke="#000" y="0" x="0" stroke-width="2" fill="#f4f3ff"/>
                 <g fill="#fff5e0" transform="scale(0.75 0.75)" stroke="#000" stroke-width="2">
@@ -105,9 +101,6 @@
                 {{ input_flags(55, 400, 3) }}
                 {{ input_present(100, 450, 3) }}
                 {{ input_disqualified(110, 500, 3) }}
-
-                <!-- Unclaimed Flags -->
-                {{ input_unclaimed_flags(225, 265) }}
             </svg>
 
             <input type="hidden" name="force" />
