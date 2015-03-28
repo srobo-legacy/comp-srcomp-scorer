@@ -4,7 +4,7 @@ import argparse
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='SR Competition Scorer')
-    parser.add_argument('-c', '--compstate', default='.',
+    parser.add_argument('compstate',
                         help='Competition state git repository path')
     parser.add_argument('-l', '--local', action='store_true',
                         help='Disable fetch and push')
