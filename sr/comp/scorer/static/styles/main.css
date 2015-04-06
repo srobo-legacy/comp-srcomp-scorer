@@ -27,8 +27,14 @@ header h1 > img {
     margin-right: 0.2em;
 }
 
+section.hint {
+    margin: 1em 0;
+    text-align: center;
+}
+
 main {
-    padding: 2em 1em 1em 1em;
+    padding: 0 1em 1em 1em;
+    margin-top: 1.5em;
     display: flex;
     justify-content: space-around;
 }
