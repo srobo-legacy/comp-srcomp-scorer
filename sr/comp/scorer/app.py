@@ -101,8 +101,8 @@ def score_to_form(score):
     for tla, info in score['teams'].items():
         i = info['zone']
         form['tla_{}'.format(i)] = tla
-        form['disqualified_{}'.format(i)] = info['disqualified']
-        form['present_{}'.format(i)] = info['present']
+        form['disqualified_{}'.format(i)] = info.get('disqualified', False)
+        form['present_{}'.format(i)] = info.get('present', True)
         form['flags_{}'.format(i)] = info['flags']
 
     form['unclaimed_flags'] = score['other']['unclaimed_flags']
