@@ -43,5 +43,6 @@
 }
 
 .dialogue button {
+    font-weight: bold;
     padding: 0.3em 0.6em;
 }
