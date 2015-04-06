@@ -64,10 +64,8 @@ app.jinja_env.globals.update(is_match_done=is_match_done)
 
 
 def form_to_score(match, form):
-    detected_flags = 0
 
     def form_team_to_score(zone, teams):
-        nonlocal detected_flags
         tla = form.get('tla_{}'.format(zone), None)
         if tla:
             flags = int(form['flags_{}'.format(zone)])
@@ -79,8 +77,6 @@ def form_to_score(match, form):
                     form.get('present_{}'.format(zone), None) is not None,
                 'flags': flags
             }
-
-            detected_flags += flags
 
             teams[tla] = team
 
