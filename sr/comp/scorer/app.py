@@ -1,8 +1,6 @@
 import collections
 from datetime import datetime
 import dateutil.tz
-import itertools
-import io
 import os
 import six.moves
 import sys
