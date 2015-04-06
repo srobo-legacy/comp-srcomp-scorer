@@ -142,7 +142,7 @@ def update_and_validate(compstate, match, score, force):
         if not force:
             # TODO Update SRComp to return the error messages.
             old_stderr = sys.stderr
-            sys.stderr = new_stderr = io.StringIO()
+            sys.stderr = new_stderr = six.moves.StringIO()
             num_errors = validate(comp)
             sys.stderr = old_stderr
             if num_errors:
