@@ -4,6 +4,10 @@
     <link href="{{ url_for('static', filename='styles/match-choice.css') }}" rel="stylesheet" />
 {% endblock %}
 
+{% block hint %}
+    <p>Select a match to enter scores</p>
+{% endblock %}
+
 {% macro match_cell(match, colspan=1, current_match=False) %}
     <td colspan="{{ colspan }}">
         {% if match is not none %}
