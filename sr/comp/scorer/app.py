@@ -4,6 +4,7 @@ import dateutil.tz
 import itertools
 import io
 import os
+import six.moves
 import sys
 
 import flask
@@ -24,7 +25,7 @@ def grouper(iterable, n, fillvalue=None):
     ['ABC', 'DEF', 'Gxx']
     """
     args = [iter(iterable)] * n
-    return itertools.zip_longest(fillvalue=fillvalue, *args)
+    return six.moves.zip_longest(fillvalue=fillvalue, *args)
 app.jinja_env.globals.update(grouper=grouper)
 
 
