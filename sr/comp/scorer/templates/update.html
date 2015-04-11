@@ -53,8 +53,13 @@
 {% endmacro %}
 
 {% block main %}
-    {% set r, g, b = parse_hex_colour(arenas[match['arena']].colour) %}
-    <div class="score-sheet" style="background: rgba({{ r }}, {{ g }}, {{ b }}, 0.15)">
+    <div class="score-sheet"
+    {% set arena_colour_raw = arenas[match['arena']].colour %}
+    {% if arena_colour_raw %}
+        {% set r, g, b = parse_hex_colour(arena_colour_raw) %}
+        style="background: rgba({{ r }}, {{ g }}, {{ b }}, 0.15)"
+    {% endif %}
+    >
         <h1>{{ match['type'].value | title }} scores for {{ match['display_name'] }} in Arena {{ arenas[match['arena']].display_name }}</h1>
 
         <form method="POST">
