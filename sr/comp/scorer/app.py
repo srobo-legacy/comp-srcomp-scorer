@@ -160,6 +160,15 @@ def before_request():
     local_only = app.config['COMPSTATE_LOCAL']
     flask.g.compstate = RawCompstate(cs_path, local_only)
 
+    correct_username = app.config['AUTH_USERNAME']
+    correct_password = app.config['AUTH_PASSWORD']
+    auth = flask.request.authorization
+    if auth is None or \
+            correct_username != auth.username or \
+            correct_password != auth.password:
+        return flask.Response('Authentication failed.', 401,
+            {'WWW-Authenticate': 'Basic realm="Authentication required."'})
+
 
 @app.route('/')
 def index():
