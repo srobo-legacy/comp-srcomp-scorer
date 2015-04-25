@@ -12,4 +12,4 @@ if __name__ == '__main__':
 
     app.config['COMPSTATE'] = args.compstate
     app.config['COMPSTATE_LOCAL'] = args.local
-    app.run(port=3000)
+    app.run(host='0.0.0.0', port=3000)
