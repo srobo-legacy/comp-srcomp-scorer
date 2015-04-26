@@ -6,7 +6,15 @@
 
 {% block hint %}
     <p>
-        <a href="{{ url_for('.index') }}">» Return to match selection</a>
+        <a href="{{ url_for('.index') }}">Return to match selection</a>
+        <a href="{{ url_for('.update', arena=match.arena, num=match.num - 1) }}">Previous match</a>
+        <a href="{{ url_for('.update', arena=match.arena, num=match.num + 1) }}">Next match</a>
+
+        {% for name, arena in arenas.items() %}
+            {% if name != match['arena'] %}
+                <a href="{{ url_for('.update', arena=name, num=match.num) }}">Arena {{ arena.display_name }}</a>
+            {% endif %}
+        {% endfor %}
     </p>
 {% endblock %}
 
