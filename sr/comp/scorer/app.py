@@ -151,7 +151,7 @@ def commit_and_push(compstate, match):
     commit_msg = 'Update {} scores for match {} in arena {}' \
         .format(match.type.value, match.num, match.arena)
 
-    compstate.commit_and_push(commit_msg)
+    compstate.commit_and_push(commit_msg, allow_empty=True)
 
 
 @app.before_request
@@ -215,7 +215,7 @@ def update(arena, num):
             force = bool(flask.request.form.get('force'))
             compstate.reset_and_fast_forward()
             update_and_validate(compstate, match, score, force)
-            commit_and_push(compstate, match, allow_empty=True)
+            commit_and_push(compstate, match)
         except RuntimeError as e:
             return flask.render_template('update.html',
                                          error=str(e),
