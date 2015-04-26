@@ -141,7 +141,17 @@
             <div>
                 <h1>Success!</h1>
                 <p>The scores have been updated successfully.</p>
-                <button data-action="url" data-url="{{ url_for('.index') }}">Select another Match</button>
+
+                <button data-action="url" data-url="{{ url_for('.index') }}">Select another match</button>
+                <button data-action="url" data-url="{{ url_for('.update', arena=match.arena, num=match.num - 1) }}">Previous match</button>
+                <button data-action="url" data-url="{{ url_for('.update', arena=match.arena, num=match.num + 1) }}">Next match</button>
+
+                {% for name, arena in arenas.items() %}
+                    {% if name != match['arena'] %}
+                        <button data-action="url" data-url="{{ url_for('.update', arena=name, num=match.num) }}">Arena {{ arena.display_name }}</button>
+                    {% endif %}
+                {% endfor %}
+
                 <button data-action="hide">Amend scores</button>
             </div>
         </aside>
