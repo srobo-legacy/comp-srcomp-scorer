@@ -141,7 +141,7 @@
             <div>
                 <h1>Success!</h1>
                 <p>The scores have been updated successfully.</p>
-                <button data-action="back">Select another Match</button>
+                <button data-action="url" data-url="{{ url_for('.index') }}">Select another Match</button>
                 <button data-action="hide">Amend scores</button>
             </div>
         </aside>
@@ -158,11 +158,13 @@
                 });
             }
 
-            var backBtns = document.querySelectorAll('[data-action=back]');
-            for (var i = 0; i < backBtns.length; i++) {
-                backBtns[i].addEventListener('click', function() {
-                    window.location = '{{ url_for('.index') }}';
-                });
+            var backBtns = document.querySelectorAll('[data-action=url]');
+            for (var i = 0; i < urlBtns.length; i++) {
+                (function(btn) {
+                    btn.addEventListener('click', function() {
+                        window.location = btn.dataset.url;
+                    });
+                }(urlBtns[i]));
             }
 
             var forceBtns = document.querySelectorAll('[data-action=force]');
