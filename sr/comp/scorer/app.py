@@ -231,3 +231,8 @@ def update(arena, num):
     return flask.render_template('update.html',
                                  done='done' in flask.request.args,
                                  **template_settings)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return flask.render_template('404.html'), 404

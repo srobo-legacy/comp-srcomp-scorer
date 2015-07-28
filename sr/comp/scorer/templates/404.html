@@ -1,0 +1,9 @@
+{% extends "_base.html" %}
+
+{% block hint %}
+  <p>Can’t find this arena or match.</p>
+{% endblock %}
+
+{% block main %}
+  <p><strong><a href="{{ url_for('.index') }}">Select a different match.</a></strong></p>
+{% endblock %}
