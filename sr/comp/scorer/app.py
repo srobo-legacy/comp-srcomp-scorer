@@ -160,8 +160,12 @@ def before_request():
     local_only = app.config['COMPSTATE_LOCAL']
     flask.g.compstate = RawCompstate(cs_path, local_only)
 
-    correct_username = app.config['AUTH_USERNAME']
-    correct_password = app.config['AUTH_PASSWORD']
+    try:
+        correct_username = app.config['AUTH_USERNAME']
+        correct_password = app.config['AUTH_PASSWORD']
+    except KeyError:
+        return  # no authentication configured
+
     auth = flask.request.authorization
     if auth is None or \
             correct_username != auth.username or \
