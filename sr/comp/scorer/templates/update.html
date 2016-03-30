@@ -2,6 +2,11 @@
 
 {% block head %}
     <link href="{{ url_for('static', filename='styles/score-sheet.css') }}" rel="stylesheet" />
+    <script type="text/javascript">
+        var token_input_change = function(input) {
+            input.value = input.value.toUpperCase();
+        };
+    </script>
 {% endblock %}
 
 {% block hint %}
@@ -33,12 +38,12 @@
     </foreignObject>
 {% endmacro %}
 
-{% macro input_flags(x, y, corner) %}
+{% macro input_tokens(x, y, corner) %}
     <foreignObject x="{{ x }}" y="{{ y }}" width="70" height="30">
-        <label for="flags_{{ corner }}"># Flags</label>
+        <label for="tokens_{{ corner }}">Tokens</label>
     </foreignObject>
-    <foreignObject x="{{ x + 75 }}" y="{{ y }}" width="100" height="30">
-        <input type="number" id="flags_{{ corner }}" name="flags_{{ corner }}" value="{{ request.form.get('flags_{}'.format(corner)) | empty_if_none }}" min="0" max="5" />
+    <foreignObject x="{{ x + 75 }}" y="{{ y }}" width="120" height="30">
+        <input type="text" id="tokens_{{ corner }}" name="tokens_{{ corner }}" value="{{ request.form.get('tokens_{}'.format(corner)) | empty_if_none }}" onkeyup="token_input_change(this);" />
     </foreignObject>
 {% endmacro %}
 
@@ -71,25 +76,12 @@
         <h1>{{ match['type'].value | title }} scores for {{ match['display_name'] }} in Arena {{ arenas[match['arena']].display_name }}</h1>
 
         <form method="POST">
-            <div class="field">
-                <label for="unclaimed_flags">Unclaimed Flags (Anywhere):</label>
-                <input type="number" id="unclaimed_flags" name="unclaimed_flags" value="{{ request.form.get('unclaimed_flags') | empty_if_none }}" required min="0" max="5" />
-            </div>
-
             <svg xmlns="http://www.w3.org/2000/svg" height="600" width="600" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <rect height="600" width="600" stroke="#000" y="0" x="0" stroke-width="2" fill="#f4f3ff"/>
-                <g fill="#fff5e0" transform="scale(0.75 0.75)" stroke="#000" stroke-width="2">
-                    <path id="path3990" d="m800 200-200-200h-185l0 250 135 135 250-0z" />
-                    <use xlink:href="#path3990" transform="matrix(0 1 -1 0 800 0)" />
-                    <use xlink:href="#path3990" transform="matrix(-1 0 0 -1 800 800)" />
-                    <use xlink:href="#path3990" transform="matrix(0 -1 1 0 0 800)" />
-                </g>
-                <g stroke="#000" stroke-width="2" fill="#c9c9c9" transform="scale(0.75 0.75)">
-                    <path d="m385 600v150h30v-150z"/>
-                    <path d="m200 385h-150v30h150z"/>
-                    <path d="m415 200v-150h-30v150z"/>
-                    <path d="m600 415h150v-30h-150z"/>
-                </g>
+                <path d="M300 0 V 600" stroke="#000" stroke-width="1"/>
+                <path d="M0 300 H 600" stroke="#000" stroke-width="1"/>
+                <rect height="200" width="200" stroke="#000" y="200" x="200" stroke-width="1" fill="#f4f3ff" transform="rotate(45,300,300)"/>
+
                 <g font-size="2.5em" fill="#4d4d4d" transform="scale(0.75 0.75)">
                     <text><tspan y="50" x="225">Zone 0</tspan></text>
                     <text><tspan y="50" x="455">Zone 1</tspan></text>
@@ -99,27 +91,30 @@
 
                 <!-- Zone 0 -->
                 {{ input_tla(110, 70, 0) }}
-                {{ input_flags(70, 120, 0) }}
+                {{ input_tokens(60, 120, 0) }}
                 {{ input_present(80, 170, 0) }}
                 {{ input_disqualified(35, 220, 0) }}
 
                 <!-- Zone 1 -->
                 {{ input_tla(345, 70, 1) }}
-                {{ input_flags(355, 120, 1) }}
+                {{ input_tokens(355, 120, 1) }}
                 {{ input_present(405, 170, 1) }}
                 {{ input_disqualified(410, 220, 1) }}
 
                 <!-- Zone 2 -->
                 {{ input_tla(425, 350, 2) }}
-                {{ input_flags(370, 400, 2) }}
+                {{ input_tokens(370, 400, 2) }}
                 {{ input_present(385, 450, 2) }}
                 {{ input_disqualified(335, 500, 2) }}
 
                 <!-- Zone 3 -->
                 {{ input_tla(30, 350, 3) }}
-                {{ input_flags(55, 400, 3) }}
+                {{ input_tokens(45, 400, 3) }}
                 {{ input_present(100, 450, 3) }}
                 {{ input_disqualified(110, 500, 3) }}
+
+                <!-- Center -->
+                {{ input_tokens(200, 285, 'other') }}
             </svg>
 
             <input type="hidden" name="force" />

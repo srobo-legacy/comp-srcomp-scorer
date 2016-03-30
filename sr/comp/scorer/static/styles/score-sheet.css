@@ -34,3 +34,7 @@
 .score-sheet svg {
     margin-bottom: 1em;
 }
+
+.score-sheet svg input[type="text"] {
+    letter-spacing: 0.15em;
+}

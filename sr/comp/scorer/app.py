@@ -67,14 +67,14 @@ def form_to_score(match, form):
     def form_team_to_score(zone, teams):
         tla = form.get('tla_{}'.format(zone), None)
         if tla:
-            flags = int(form['flags_{}'.format(zone)])
+            tokens = form['tokens_{}'.format(zone)]
             team = {
                 'zone': zone,
                 'disqualified':
                     form.get('disqualified_{}'.format(zone), None) is not None,
                 'present':
                     form.get('present_{}'.format(zone), None) is not None,
-                'flags': flags
+                'tokens': tokens
             }
 
             teams[tla] = team
@@ -88,7 +88,7 @@ def form_to_score(match, form):
         'match_number': match.num,
         'teams': teams,
         'other': {
-            'unclaimed_flags': int(form.get('unclaimed_flags', 0))
+            'tokens': form.get('tokens_other', '')
         }
     }
 
@@ -101,9 +101,9 @@ def score_to_form(score):
         form['tla_{}'.format(i)] = tla
         form['disqualified_{}'.format(i)] = info.get('disqualified', False)
         form['present_{}'.format(i)] = info.get('present', True)
-        form['flags_{}'.format(i)] = info['flags']
+        form['tokens_{}'.format(i)] = info['tokens'].upper()
 
-    form['unclaimed_flags'] = score['other']['unclaimed_flags']
+    form['tokens_other'] = score['other']['tokens'].upper()
 
     return form
 
@@ -116,9 +116,9 @@ def match_to_form(match):
             form['tla_{}'.format(i)] = tla
             form['disqualified_{}'.format(i)] = False
             form['present_{}'.format(i)] = False
-            form['flags_{}'.format(i)] = 0
+            form['tokens_{}'.format(i)] = ''
 
-    form['unclaimed_flags'] = 5
+    form['tokens'] = ''
 
     return form
 
