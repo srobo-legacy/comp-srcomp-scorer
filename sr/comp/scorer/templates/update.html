@@ -2,11 +2,6 @@
 
 {% block head %}
     <link href="{{ url_for('static', filename='styles/score-sheet.css') }}" rel="stylesheet" />
-    <script type="text/javascript">
-        var token_input_change = function(input) {
-            input.value = input.value.toUpperCase();
-        };
-    </script>
 {% endblock %}
 
 {% block hint %}
@@ -181,4 +176,25 @@
             }
         </script>
     {% endif %}
+
+    <script type="text/javascript">
+        var valid_token_regex = /^[GOPWY]*$/;
+
+        var token_input_change = function(input) {
+            input.value = input.value.toUpperCase();
+            validate_input(input);
+        };
+        var validate_input = function(input) {
+            if (input.value.match(valid_token_regex)) {
+                input.className = '';
+            } else {
+                input.className = 'invalid';
+            }
+        };
+
+        var textInputs = document.querySelectorAll('input[type=text]');
+        for (var i = 0; i < textInputs.length; i++) {
+            validate_input(textInputs[i]);
+        }
+    </script>
 {% endblock %}
