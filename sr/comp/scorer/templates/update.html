@@ -3,8 +3,15 @@
 {% block head %}
     <link href="{{ url_for('static', filename='styles/score-sheet.css') }}" rel="stylesheet" />
     <script type="text/javascript">
+        var valid_token_regex = /^[GOPWY]*$/;
+
         var token_input_change = function(input) {
             input.value = input.value.toUpperCase();
+            if (input.value.match(valid_token_regex)) {
+                input.className = '';
+            } else {
+                input.className = 'invalid';
+            }
         };
     </script>
 {% endblock %}
