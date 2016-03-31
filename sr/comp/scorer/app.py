@@ -90,7 +90,7 @@ def form_to_score(match, form):
         'arena_id': match.arena,
         'match_number': match.num,
         'teams': teams,
-        'arena': arena,
+        'arena_zones': arena,
     }
 
 
@@ -103,7 +103,7 @@ def score_to_form(score):
         form['disqualified_{}'.format(i)] = info.get('disqualified', False)
         form['present_{}'.format(i)] = info.get('present', True)
 
-    for zone, info in score['arena'].items():
+    for zone, info in score['arena_zones'].items():
         form['tokens_{}'.format(zone)] = info['tokens'].upper()
 
     return form
