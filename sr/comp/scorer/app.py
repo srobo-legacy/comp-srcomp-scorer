@@ -77,11 +77,13 @@ def form_to_score(match, form):
 
             teams[tla] = team
 
+    zone_ids = range(len(match.teams))
+
     teams = {}
-    for i in range(4):
+    for i in zone_ids:
         form_team_to_score(i, teams)
 
-    zones = list(range(4)) + ['other']
+    zones = list(zone_ids) + ['other']
     arena = {}
     for zone in zones:
         arena[zone] = { 'tokens': form.get('tokens_{}'.format(zone), '') }
