@@ -18,7 +18,7 @@ setup(
     install_requires=[
         'PyYAML >=3.11, <4',
         'six >=1.8, <2',
-        'Flask >=0.10, <0.11',
+        'Flask >=1.0, <2',
         'sr.comp >=1.0, <2'
     ],
     setup_requires=[
