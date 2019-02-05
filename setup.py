@@ -16,7 +16,7 @@ setup(
     author='Student Robotics Competition Software SIG',
     author_email='srobo-devel@googlegroups.com',
     install_requires=[
-        'PyYAML >=3.11, <4',
+        'PyYAML >=3.11, <5',
         'six >=1.8, <2',
         'Flask >=1.0, <2',
         'sr.comp >=1.0, <2'
